@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.domain;
+package br.com.api.harmonia_rpg.domain.entities;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;

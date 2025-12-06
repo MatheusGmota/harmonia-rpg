@@ -1,6 +1,6 @@
 package br.com.api.harmonia_rpg.service;
 
-import br.com.api.harmonia_rpg.domain.Usuario;
+import br.com.api.harmonia_rpg.domain.entities.Usuario;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;

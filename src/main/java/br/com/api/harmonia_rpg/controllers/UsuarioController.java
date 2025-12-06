@@ -1,6 +1,6 @@
 package br.com.api.harmonia_rpg.controllers;
 
-import br.com.api.harmonia_rpg.domain.Usuario;
+import br.com.api.harmonia_rpg.domain.entities.Usuario;
 import br.com.api.harmonia_rpg.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
