@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.config;
+package br.com.api.harmonia_rpg.infra.config;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
