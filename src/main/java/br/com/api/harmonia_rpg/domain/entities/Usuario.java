@@ -1,9 +1,11 @@
 package br.com.api.harmonia_rpg.domain.entities;
 
+import br.com.api.harmonia_rpg.domain.dtos.CadastroRequestDTO;
 import br.com.api.harmonia_rpg.domain.enums.TipoUsuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,22 +43,31 @@ public class Usuario implements UserDetails  {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    @Exclude
     @Override
     public String getUsername() {
         return nomeUsuario;
     }
 
+    @Exclude
     @Override
     public String getPassword() {
         return senha;
     }
 
+    @Exclude
     @Override
     public boolean isAccountNonExpired() { return true; }
+
+    @Exclude
     @Override
     public boolean isAccountNonLocked() { return true; }
+
+    @Exclude
     @Override
     public boolean isCredentialsNonExpired() { return true; }
+
+    @Exclude
     @Override
     public boolean isEnabled() { return true; }
 }
