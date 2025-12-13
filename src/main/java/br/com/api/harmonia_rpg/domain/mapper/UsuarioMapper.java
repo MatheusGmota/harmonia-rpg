@@ -3,10 +3,10 @@ package br.com.api.harmonia_rpg.domain.mapper;
 import br.com.api.harmonia_rpg.domain.dtos.CadastroRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.UsuarioRequestDTO;
 import br.com.api.harmonia_rpg.domain.entities.Usuario;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UsuarioMapper {
-
-    private UsuarioMapper() {}
 
     private static Usuario baseUsuario(String nomeUsuario, String senha) {
         Usuario u = new Usuario();
