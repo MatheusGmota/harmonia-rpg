@@ -34,6 +34,7 @@ public class Usuario implements UserDetails  {
     @ServerTimestamp
     private Timestamp criadoEm;
 
+    @Exclude
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
