@@ -1,14 +1,15 @@
 package br.com.api.harmonia_rpg.controllers;
 
+import br.com.api.harmonia_rpg.domain.dtos.FichaRequestDTO;
+import br.com.api.harmonia_rpg.domain.dtos.FichaResponseDTO;
 import br.com.api.harmonia_rpg.domain.dtos.FichaUsuarioDTO;
-import br.com.api.harmonia_rpg.domain.entities.Ficha;
 import br.com.api.harmonia_rpg.service.FichaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/ficha")
@@ -20,41 +21,38 @@ public class FichaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") String id) {
-        Ficha res = service.obterFicha(id);
-        if (res == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma ficha encontrada");
-        return ResponseEntity.ok(res);
+        FichaResponseDTO resposta = service.obterFicha(id);
+        return ResponseEntity.ok(resposta);
     }
 
     @GetMapping("/usuario")
     public ResponseEntity<Object> getByUser(@RequestParam("id-usuario") String idUsuario) {
-        List<FichaUsuarioDTO> res = service.obterFichasDoUsuario(idUsuario);
-        if (res == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma ficha encontrada");
-        return ResponseEntity.ok(res);
+        List<FichaUsuarioDTO> resposta = service.obterFichasDoUsuario(idUsuario);
+        return ResponseEntity.ok(resposta);
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestParam("id-usuario") String idUsuario, @RequestBody Ficha ficha) {
-        Object res = service.criarFicha(idUsuario, ficha);
-        if (res == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário encontrado");
-        return ResponseEntity.ok(res);
+    public ResponseEntity<Object> create(
+            @RequestParam("id-usuario") String idUsuario,
+            @RequestBody FichaRequestDTO ficha) {
+        FichaResponseDTO resposta = service.criarFicha(idUsuario, ficha);
+        return ResponseEntity.ok(resposta);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody Ficha ficha) {
-        Object res = service.editarFicha(id, ficha);
-        if (res == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma ficha encontrada");
-        return ResponseEntity.ok(res);
+    public ResponseEntity<Object> update(
+            @PathVariable("id") String id,
+            @RequestParam("id-usuario") String idUsuario,
+            @RequestBody FichaRequestDTO ficha) {
+        Object resposta = service.editarFicha(id, idUsuario, ficha);
+        return ResponseEntity.ok(resposta);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
-        Object res = service.deletarFicha(id);
-        if (res == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma ficha encontrada");
-        return ResponseEntity.ok(res);
+    public ResponseEntity<Object> deletar(
+            @PathVariable("id") String id,
+            @RequestParam("id-usuario") String idUsuario) {
+        Map<String, Object> resposta = service.deletarFicha(id, idUsuario);
+        return ResponseEntity.ok(resposta);
     }
 }

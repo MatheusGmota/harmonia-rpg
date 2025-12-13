@@ -1,15 +1,22 @@
 package br.com.api.harmonia_rpg.service;
 
+import br.com.api.harmonia_rpg.domain.dtos.FichaRequestDTO;
+import br.com.api.harmonia_rpg.domain.dtos.FichaResponseDTO;
 import br.com.api.harmonia_rpg.domain.dtos.FichaUsuarioDTO;
+import br.com.api.harmonia_rpg.domain.dtos.UsuarioResponseDTO;
 import br.com.api.harmonia_rpg.domain.entities.Ficha;
-import br.com.api.harmonia_rpg.domain.entities.Usuario;
-import com.google.api.core.ApiFuture;
+import br.com.api.harmonia_rpg.domain.enums.TipoUsuario;
+import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
+import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
+import br.com.api.harmonia_rpg.domain.mapper.FichaMapper;
+import br.com.api.harmonia_rpg.repositories.FichaRepository;
 import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -20,17 +27,18 @@ public class FichaService {
     private UsuarioService usuarioService;
 
     @Autowired
-    private Firestore firestore;
+    private FichaRepository db;
 
-    public Ficha obterFicha(String id) {
+    public FichaResponseDTO obterFicha(String id) {
         try {
-            ApiFuture<DocumentSnapshot> fichas = firestore.collection("fichas").document(id).get();
-            if (!fichas.get().exists()) {
-                log.error("Nenhuma ficha encontrada");
-                return null;
+            DocumentSnapshot fichas = db.obterFichaPorId(id);
+
+            if (!fichas.exists()) {
+                log.warn("Nenhuma ficha encontrada");
+                throw new NotFoundException("Nenhuma ficha encontrada");
             }
 
-            return fichas.get().toObject(Ficha.class);
+            return fichas.toObject(FichaResponseDTO.class);
         } catch (InterruptedException | ExecutionException e) {
             log.error("Erro ao obter ficha: {}", e.getMessage());
             throw new RuntimeException(e);
@@ -39,76 +47,79 @@ public class FichaService {
 
     public List<FichaUsuarioDTO> obterFichasDoUsuario(String idUsuario) {
         try {
-            Usuario usuario = usuarioService.obterUsuario(idUsuario);
-            if (usuario == null) return null;
+            usuarioService.obterUsuarioPorId(idUsuario); // Chamada para validar usuario existente
 
-            ApiFuture<QuerySnapshot> fichas = firestore.collection("fichas")
-                    .whereEqualTo("idUsuario", idUsuario)
-                    .get();
+            List<FichaUsuarioDTO> fichasDoUsuario = db.obterFichasDoUsuario(idUsuario);
 
-            return fichas.get().getDocuments()
-                    .stream().map(f -> {
-                        Ficha o = f.toObject(Ficha.class);
+            if (fichasDoUsuario.isEmpty()) throw new NotFoundException("Nenhuma ficha encontrada para esse usuário");
 
-                        return FichaUsuarioDTO.from(o);
-                    }).toList();
-
+            return fichasDoUsuario;
         } catch (InterruptedException | ExecutionException e) {
             log.error("Erro ao obter fichas do usuário: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public String criarFicha(String idUsuario, Ficha ficha) {
+    public FichaResponseDTO criarFicha(String idUsuario, FichaRequestDTO dto) {
         try {
-            Usuario usuario = usuarioService.obterUsuario(idUsuario);
-            if (usuario == null) return null;
+            usuarioService.obterUsuarioPorId(idUsuario);
+
+            Ficha ficha = FichaMapper.toFicha(dto, idUsuario);
 
             if (ficha.getTrilha().getClasse() != ficha.getClasse()) {
                 throw new IllegalArgumentException("A trilha selecionada não pertence à classe do personagem.");
             }
 
-            ficha.setIdUsuario(idUsuario);
-            ApiFuture<DocumentReference> fichas = firestore.collection("fichas").add(ficha);
-            return "Ficha(id: " + fichas.get().getId() + ") cadastrada com sucesso para usuário: " + idUsuario;
+            DocumentSnapshot adicionar = db.adicionar(ficha).get();
+
+            return adicionar.toObject(FichaResponseDTO.class);
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public String editarFicha(String id, Ficha ficha) {
+    public Map<String, Object> editarFicha(String id, String idUsuario, FichaRequestDTO dto) {
         try {
-            DocumentReference fichas = firestore.collection("fichas").document(id);
+            FichaResponseDTO fichaResponse = obterFicha(id);
+            UsuarioResponseDTO usuario = usuarioService.obterUsuarioPorId(idUsuario);
 
-            if (!fichas.get().get().exists()) {
-                log.error("Não existe ficha para id: {}", id);
-                return null;
+            if (!fichaResponse.idUsuario().equals(idUsuario)) {
+                // se usuario for o responsável pela ficha pode editar
+                log.warn("A ficha não pertence ao usuário");
+                if (!usuario.tipoUsuario().equals(TipoUsuario.MESTRE)) {
+                    // se não for só pode editar caso seja do TipoUsuario 'MESTRE'
+                    throw new BusinessException("Este usuário não pode editar essa ficha");
+                }
             }
 
-            WriteResult writeResult = fichas.set(ficha, SetOptions.merge()).get();
+            WriteResult atualizar = db.atualizar(id, FichaMapper.toFicha(dto, fichaResponse.idUsuario()));
 
-            return "Ficha atualizada em: " + writeResult.getUpdateTime();
+            return Map.of("message", "Atualizado com sucesso", "atualizadoEm", atualizar.getUpdateTime());
         } catch (InterruptedException | ExecutionException e) {
             log.error("Erro ao atualizar ficha: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public String deletarFicha(String id) {
+    public Map<String, Object> deletarFicha(String id, String idUsuario) {
         try {
-            DocumentReference fichas = firestore.collection("fichas").document(id);
+            usuarioService.obterUsuarioPorId(idUsuario); // validar se usuario é existente
 
-            if (!fichas.get().get().exists()) {
-                log.error("Não existe ficha para id: {}", id);
-                return null;
+            FichaResponseDTO ficha = obterFicha(id);
+
+            if (!ficha.idUsuario().equals(idUsuario)) {
+                // se usuario for o responsável pela ficha pode editar
+                log.warn("A ficha não pertence ao usuário");
+                throw new BusinessException("Este usuário não pode editar essa ficha");
             }
+            WriteResult deletar = db.deletar(id);
 
-            ApiFuture<WriteResult> deletado = fichas.delete();
+            log.info("Usuário id:{} deletado em: {}", id, deletar.getUpdateTime());
 
-            return "Ficha excluída em: " + deletado.get().getUpdateTime();
+            return Map.of("message", "Deletado com sucesso", "atualizadoEm", deletar.getUpdateTime());
         } catch (InterruptedException | ExecutionException e) {
-            log.error("Erro ao excluir ficha: {}", e.getMessage());
+            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

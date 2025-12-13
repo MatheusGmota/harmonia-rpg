@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class FichaMapper {
 
-    public static Ficha toFicha(FichaRequestDTO dto) {
+    public static Ficha toFicha(FichaRequestDTO dto, String idUsuario) {
         Ficha ficha = new Ficha();
-
+        ficha.setIdUsuario(idUsuario);
         // Dados de Identificação
         ficha.setNomeCampanha(dto.nomeCampanha());
         ficha.setPersonagem(dto.personagem());
