@@ -1,7 +1,5 @@
 package br.com.api.harmonia_rpg.controllers;
 
-import br.com.api.harmonia_rpg.domain.dtos.CadastroRequestDTO;
-import br.com.api.harmonia_rpg.domain.dtos.CadastroResponseDTO;
 import br.com.api.harmonia_rpg.domain.dtos.UsuarioRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.UsuarioResponseDTO;
 import br.com.api.harmonia_rpg.service.UsuarioService;
@@ -23,12 +21,6 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") String id) {
         UsuarioResponseDTO resposta = service.obterUsuarioPorId(id);
-        return ResponseEntity.ok(resposta);
-    }
-
-    @PostMapping
-    public ResponseEntity<Object> create(@Valid @RequestBody CadastroRequestDTO dto) {
-        CadastroResponseDTO resposta = service.registrarUsuario(dto);
         return ResponseEntity.ok(resposta);
     }
 
