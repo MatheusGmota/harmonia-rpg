@@ -1,3 +1,11 @@
 spring:
   application:
     name: harmonia-rpg
+
+api:
+  secret:
+    token:
+      secret: ${JWT_SECRET}
+
+server:
+  port: ${PORT:8080}
