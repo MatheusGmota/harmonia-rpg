@@ -46,7 +46,7 @@ public class Ficha {
     private int defesaEsquiva;
     private int redDanoBloqueando;
     private int protecao;
-    private TipoElemento resistencia;
+    private String resistencia;
     private String deslocamento;
 
     @ServerTimestamp

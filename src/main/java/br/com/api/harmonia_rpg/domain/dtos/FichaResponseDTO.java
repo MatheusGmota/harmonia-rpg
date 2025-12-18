@@ -33,7 +33,7 @@ public record FichaResponseDTO(
         int defesaEsquiva,
         int redDanoBloqueando,
         int protecao,
-        TipoElemento resistencia,
+        String resistencia,
         String deslocamento,
         Timestamp criadoEm
 ) {
