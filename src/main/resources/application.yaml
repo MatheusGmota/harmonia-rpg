@@ -5,7 +5,16 @@ spring:
 api:
   secret:
     token:
-      secret: ${JWT_SECRET}
+      secret: ${JWT_SECRET:my-secret-key}
+
+info:
+  app:
+    version: 1.0
+
+springdoc:
+  info:
+    description: API para o webapp de Gerenciador de Ficha RPG
+    title: Gerenciador de Ficha RPG
 
 server:
   port: ${PORT:8080}
