@@ -3,8 +3,8 @@ package br.com.api.harmonia_rpg.service;
 import br.com.api.harmonia_rpg.domain.dtos.AtributoResponseDTO;
 
 import br.com.api.harmonia_rpg.domain.entities.Atributos;
-import br.com.api.harmonia_rpg.domain.exceptions.AtributosJaExistemException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
+import br.com.api.harmonia_rpg.domain.exceptions.ObjectAlreadyExistsException;
 import br.com.api.harmonia_rpg.repositories.AtributoRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class AtributoService {
             fichaService.obterFicha(idFicha); // Valida se a ficha existe
 
             if (repository.existePorIdFicha(idFicha)) {
-                throw new AtributosJaExistemException(idFicha);
+                throw new ObjectAlreadyExistsException("Descrição já existe no id:" + idFicha);
             }
 
             atributos.setIdFicha(idFicha); // garante vínculo entre a ficha e os atributos
