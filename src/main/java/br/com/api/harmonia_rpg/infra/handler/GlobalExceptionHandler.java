@@ -1,5 +1,6 @@
 package br.com.api.harmonia_rpg.infra.handler;
 
+import br.com.api.harmonia_rpg.domain.exceptions.AtributosJaExistemException;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.exceptions.UserAlreadyExistsException;
@@ -33,6 +34,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUserAuthenticationError(UsernameNotFoundException ex) {
         return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
+
+    @ExceptionHandler(AtributosJaExistemException.class)
+    public ResponseEntity<Object> handleAtributosExistentes(
+            AtributosJaExistemException ex) {
+
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
 
     // Erros de objetos não encontrados
     @ExceptionHandler(NotFoundException.class)
