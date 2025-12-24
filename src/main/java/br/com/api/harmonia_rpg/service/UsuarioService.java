@@ -7,7 +7,6 @@ import br.com.api.harmonia_rpg.domain.exceptions.UserAlreadyExistsException;
 import br.com.api.harmonia_rpg.domain.mapper.UsuarioMapper;
 import br.com.api.harmonia_rpg.infra.security.TokenService;
 import br.com.api.harmonia_rpg.repositories.UsuarioRepository;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class UsuarioService {
             Usuario user = (Usuario) auth.getPrincipal();
             var token = tokenService.generateToken((Usuario) Objects.requireNonNull(auth.getPrincipal()));
 
-            return new UsuarioTokenResponseDTO(user.getId(), user.getUsername(), token, Timestamp.now());
+            return new UsuarioTokenResponseDTO(user.getId(), user.getUsername(), token, user.getCriadoEm());
         } catch (AuthenticationException e) {
             log.error(e.getMessage());
             throw new UsernameNotFoundException(e.getMessage());
