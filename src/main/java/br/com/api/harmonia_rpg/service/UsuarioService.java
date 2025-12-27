@@ -60,14 +60,27 @@ public class UsuarioService {
             // Encriptando senha
             usuario.setSenha(encriptarSenha(usuario.getSenha()));
 
-            Usuario salvar = db.salvar(usuario).get().toObject(Usuario.class);
+            Usuario usuarioSalvo = db.salvar(usuario).get().toObject(Usuario.class);
 
-            return new UsuarioTokenResponseDTO(salvar.getId(), salvar.getNomeUsuario(), null, salvar.getCriadoEm());
+            if (usuarioSalvo == null) {
+                throw new RuntimeException("Erro ao recuperar usuário após o salvamento.");
+            }
+
+            // Gerando token para o login automático
+            String token = tokenService.generateToken(usuarioSalvo);
+
+            return new UsuarioTokenResponseDTO(
+                    usuarioSalvo.getId(),
+                    usuarioSalvo.getNomeUsuario(),
+                    token,
+                    usuarioSalvo.getCriadoEm()
+            );
+
         } catch (InterruptedException | ExecutionException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error("Erro no processo de cadastro: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Falha ao registrar e autenticar usuário.", e);
         }
-
     }
 
     public UsuarioResponseDTO obterUsuarioPorId(String id) {
