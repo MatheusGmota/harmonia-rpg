@@ -14,6 +14,8 @@ public record FichaRequestDTO(
         @NotBlank(message = "O nome da campanha é obrigatório.")
         String nomeCampanha,
 
+        String imgPersonagem,
+
         @NotBlank(message = "O nome do personagem é obrigatório.")
         String personagem,
 

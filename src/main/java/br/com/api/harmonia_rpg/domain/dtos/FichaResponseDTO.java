@@ -13,6 +13,7 @@ public record FichaResponseDTO(
         String id,
         String idUsuario,
         String nomeCampanha,
+        String imgPersonagem,
         String personagem,
         int idade,
         TipoOrigem origem,

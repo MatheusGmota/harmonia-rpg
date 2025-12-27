@@ -22,6 +22,7 @@ public class Ficha {
 
     private String nomeCampanha;
 
+    private String imgPersonagem;
     private String personagem;
     private int idade;
     private TipoOrigem origem;

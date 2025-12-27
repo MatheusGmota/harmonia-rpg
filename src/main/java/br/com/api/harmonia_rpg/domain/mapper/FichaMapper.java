@@ -12,6 +12,7 @@ public class FichaMapper {
         ficha.setIdUsuario(idUsuario);
         // Dados de Identificação
         ficha.setNomeCampanha(dto.nomeCampanha());
+        ficha.setImgPersonagem(dto.imgPersonagem());
         ficha.setPersonagem(dto.personagem());
         ficha.setIdade(dto.idade());
 
