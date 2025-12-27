@@ -41,7 +41,7 @@ public class FichaMapper {
         ficha.setDefesa(dto.defesa());
         ficha.setDefesaEsquiva(dto.defesaEsquiva());
         ficha.setRedDanoBloqueando(dto.redDanoBloqueando());
-        ficha.setProtecao(dto.protecao());
+        ficha.setProtecoes(dto.protecoes());
         ficha.setResistencia(dto.resistencia());
         ficha.setDeslocamento(dto.deslocamento());
 
