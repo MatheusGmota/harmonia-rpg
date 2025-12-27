@@ -61,7 +61,7 @@ public record FichaRequestDTO(
         int defesa,
         int defesaEsquiva,
         int redDanoBloqueando,
-        int protecao,
+        String protecoes,
         String resistencia,
         String deslocamento
 ) {}

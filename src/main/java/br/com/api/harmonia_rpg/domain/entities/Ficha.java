@@ -45,7 +45,7 @@ public class Ficha {
     private int defesa;
     private int defesaEsquiva;
     private int redDanoBloqueando;
-    private int protecao;
+    private String protecoes;
     private String resistencia;
     private String deslocamento;
 
