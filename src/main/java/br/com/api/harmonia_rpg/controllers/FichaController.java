@@ -48,6 +48,16 @@ public class FichaController {
         return ResponseEntity.ok(resposta);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> patchFicha(
+            @PathVariable String id,
+            @RequestHeader("X-Usuario-ID") String idUsuarioLogado,
+            @RequestBody Map<String, Object> updates) {
+
+        service.patchFicha(id, idUsuarioLogado, updates);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(
             @PathVariable("id") String id,

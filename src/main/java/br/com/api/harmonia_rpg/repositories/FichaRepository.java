@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -54,6 +55,12 @@ public class FichaRepository {
                 .document(id)
                 .set(ficha, SetOptions.merge())
                 .get();
+    }
+
+    public WriteResult atualizarParcial(String idFicha, Map<String, Object> updates) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = getCollection().document(idFicha);
+
+        return docRef.update(updates).get();
     }
 
     public WriteResult deletar(String id) throws ExecutionException, InterruptedException {

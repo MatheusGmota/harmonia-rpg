@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -124,4 +125,36 @@ public class FichaService {
         }
     }
 
+    public void patchFicha(String idFicha, String idUsuario, Map<String, Object> updates) {
+        try {
+            DocumentSnapshot doc = db.obterFichaPorId(idFicha);
+            if (!doc.getString("idUsuario").equals(idUsuario)) {
+                throw new RuntimeException("Acesso negado");
+            }
+
+            Map<String, Object> flattenedUpdates = flattenMap(updates, "");
+
+            db.atualizarParcial(idFicha, flattenedUpdates);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar ficha", e);
+        }
+    }
+
+    private Map<String, Object> flattenMap(Map<String, Object> map, String prefix) {
+        Map<String, Object> flattened = new HashMap<>();
+
+        map.forEach((key, value) -> {
+            String newKey = (prefix.isEmpty()) ? key : prefix + "." + key;
+
+            if (value instanceof Map) {
+                // Se o valor for outro mapa, chama a função recursivamente
+                flattened.putAll(flattenMap((Map<String, Object>) value, newKey));
+            } else {
+                flattened.put(newKey, value);
+            }
+        });
+
+        return flattened;
+    }
 }
