@@ -14,7 +14,9 @@ import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,18 +130,32 @@ public class FichaService {
     public void patchFicha(String idFicha, String idUsuario, Map<String, Object> updates) {
         try {
             DocumentSnapshot doc = db.obterFichaPorId(idFicha);
-            if (!doc.getString("idUsuario").equals(idUsuario)) {
-                throw new RuntimeException("Acesso negado");
+
+            if (!doc.exists()) {
+                throw new BusinessException("Ficha não encontrada");
+            }
+
+            if (!idUsuario.equals(doc.getString("idUsuario"))) {
+                throw new BusinessException("Acesso negado");
             }
 
             Map<String, Object> flattenedUpdates = flattenMap(updates, "");
 
-            db.atualizarParcial(idFicha, flattenedUpdates);
+            // Remove campos inválidos ou inexistentes
+            Map<String, Object> safeUpdates = filterValidFields(flattenedUpdates, Ficha.class);
 
-        } catch (Exception e) {
+            if (safeUpdates.isEmpty()) {
+                throw new BusinessException("Nenhum campo válido para atualização");
+            }
+
+            db.atualizarParcial(idFicha, safeUpdates);
+
+        } catch (InterruptedException | ExecutionException e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException("Erro ao atualizar ficha", e);
         }
     }
+
 
     private Map<String, Object> flattenMap(Map<String, Object> map, String prefix) {
         Map<String, Object> flattened = new HashMap<>();
@@ -157,4 +173,35 @@ public class FichaService {
 
         return flattened;
     }
+
+    private Map<String, Object> filterValidFields(
+            Map<String, Object> updates,
+            Class<?> rootClass
+    ) {
+        Map<String, Object> validUpdates = new HashMap<>();
+
+        updates.forEach((path, value) -> {
+            if (isValidFieldPath(rootClass, path)) {
+                validUpdates.put(path, value);
+            }
+        });
+
+        return validUpdates;
+    }
+
+
+    private boolean isValidFieldPath(Class<?> clazz, String path) {
+        String[] parts = path.split("\\.");
+        Class<?> currentClass = clazz;
+
+        for (String part : parts) {
+            Field field = ReflectionUtils.findField(currentClass, part);
+            if (field == null) {
+                return false;
+            }
+            currentClass = field.getType();
+        }
+        return true;
+    }
+
 }

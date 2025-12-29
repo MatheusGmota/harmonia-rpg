@@ -51,10 +51,10 @@ public class FichaController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchFicha(
             @PathVariable String id,
-            @RequestHeader("X-Usuario-ID") String idUsuarioLogado,
+            @RequestParam("id-usuario") String idUsuario,
             @RequestBody Map<String, Object> updates) {
 
-        service.patchFicha(id, idUsuarioLogado, updates);
+        service.patchFicha(id, idUsuario, updates);
         return ResponseEntity.noContent().build();
     }
 
