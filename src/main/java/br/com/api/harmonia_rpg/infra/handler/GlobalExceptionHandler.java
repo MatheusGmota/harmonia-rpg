@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     // Erros de objetos em tempo de execução
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeError(RuntimeException ex) {
-        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     // Erros de validação (@Valid)
