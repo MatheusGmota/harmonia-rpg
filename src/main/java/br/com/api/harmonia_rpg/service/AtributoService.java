@@ -39,7 +39,7 @@ public class AtributoService {
             fichaService.obterFicha(idFicha); // Valida se a ficha existe
 
             if (repository.existePorIdFicha(idFicha)) {
-                throw new ObjectAlreadyExistsException("Descrição já existe no id:" + idFicha);
+                throw new ObjectAlreadyExistsException("Atributos já existem no id:" + idFicha);
             }
 
             atributos.setIdFicha(idFicha); // garante vínculo entre a ficha e os atributos
