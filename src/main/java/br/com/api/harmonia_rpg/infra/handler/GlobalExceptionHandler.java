@@ -42,10 +42,15 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-
     // Erros de objetos não encontrados
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundError(NotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    // Erros de objetos em tempo de execução
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeError(RuntimeException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 

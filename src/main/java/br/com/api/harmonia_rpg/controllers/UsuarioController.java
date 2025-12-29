@@ -25,14 +25,28 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") String id, @Valid @RequestBody UsuarioRequestDTO dto) {
-        Map<String, Object> resposta = service.editarUsuario(id, dto);
+    public ResponseEntity<Object> update(
+            @PathVariable("id") String id,
+            @RequestHeader("Authorization") String token,
+            @Valid @RequestBody UsuarioRequestDTO dto) {
+        Map<String, Object> resposta = service.editarUsuario(id, token,dto);
+        return ResponseEntity.ok(resposta);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> patch(
+            @PathVariable("id") String id,
+            @RequestHeader("Authorization") String token,
+            @RequestBody Map<String, Object> updates) {
+        Map<String, Object> resposta = service.editarParcialUsuario(id, token, updates);
         return ResponseEntity.ok(resposta);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
-        Map<String, Object> resposta = service.deletarUsuario(id);
+    public ResponseEntity<Object> delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable("id") String id) {
+        Map<String, Object> resposta = service.deletarUsuario(id, token);
         return ResponseEntity.ok(resposta);
     }
 }

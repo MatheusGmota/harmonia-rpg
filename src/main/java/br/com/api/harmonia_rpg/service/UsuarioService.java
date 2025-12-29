@@ -2,6 +2,7 @@ package br.com.api.harmonia_rpg.service;
 
 import br.com.api.harmonia_rpg.domain.dtos.*;
 import br.com.api.harmonia_rpg.domain.entities.Usuario;
+import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.exceptions.UserAlreadyExistsException;
 import br.com.api.harmonia_rpg.domain.mapper.UsuarioMapper;
@@ -101,11 +102,11 @@ public class UsuarioService {
         }
     }
 
-    public Map<String, Object> editarUsuario(String id, UsuarioRequestDTO requisicao) {
+    public Map<String, Object> editarUsuario(String id, String token, UsuarioRequestDTO requisicao) {
         try {
+            verificaUsuario(id, token); // verifica se usuario existe pelo id
+                                        // e caso exista, verifica se está permitido editar
             Usuario usuario = UsuarioMapper.from(requisicao);
-
-            obterUsuarioPorId(id); // Faz chamada apenas para validar existência do usuário pelo ID
 
             validarNomeUsuario(usuario.getNomeUsuario(), "Nome de usuário já utilizado");
 
@@ -129,9 +130,10 @@ public class UsuarioService {
 
     }
 
-    public Map<String, Object> deletarUsuario(String id) {
+    public Map<String, Object> deletarUsuario(String id, String token) {
         try {
-            obterUsuarioPorId(id); // Faz chamada apenas para validar existência do usuário pelo ID
+            verificaUsuario(id, token); // verifica se usuario existe pelo id
+                                        // e caso exista, verifica se está permitido editar
 
             WriteResult deletar = db.deletar(id);
 
@@ -141,6 +143,37 @@ public class UsuarioService {
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
+        }
+    }
+    public Map<String, Object> editarParcialUsuario(String id, String token, Map<String, Object> updates) {
+        try {
+            verificaUsuario(id, token);
+
+            if (updates.get("senha") != null) {
+                String senha = updates.get("senha").toString();
+                updates.remove("senha");
+
+                updates.put("senha", encriptarSenha(senha)); // Encriptando senha
+            }
+
+            WriteResult atualizar = db.atualizarUsuarioParcial(id, updates);
+            return Map.of("message", "Atualizado com sucesso", "atualizadoEm", atualizar.getUpdateTime());
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void verificaUsuario(String idUsuario, String token) {
+        obterUsuarioPorId(idUsuario); // Faz chamada apenas para validar existência do usuário pelo ID
+
+
+        String[] tokenSplited = token.split("Bearer ");
+
+        var nomeUsuario = tokenService.validateToken(tokenSplited[1]);
+        UsuarioResponseDTO usuario = obterUsuarioPorId(idUsuario);
+
+        if (!usuario.nomeUsuario().equals(nomeUsuario)) {
+            throw new BusinessException("Acesso negado");
         }
     }
 
@@ -155,5 +188,4 @@ public class UsuarioService {
     private String encriptarSenha(String senha) {
         return new BCryptPasswordEncoder().encode(senha);
     }
-
 }

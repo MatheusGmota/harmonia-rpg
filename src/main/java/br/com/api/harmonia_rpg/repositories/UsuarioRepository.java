@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -68,5 +69,11 @@ public class UsuarioRepository {
     public WriteResult deletar(String id) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> writeResultApiFuture = getCollection().document(id).delete();
         return writeResultApiFuture.get();
+    }
+
+    public WriteResult atualizarUsuarioParcial(String id, Map<String, Object> updates) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = getCollection().document(id);
+
+        return docRef.update(updates).get();
     }
 }
