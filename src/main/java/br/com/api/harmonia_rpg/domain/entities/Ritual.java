@@ -21,6 +21,10 @@ public class Ritual {
     private String descricao;
     private int dtRitual;
 
-    private String danoSanidade = "Fazer um teste de ocultismo (DT = 20+qtd de PE gastos). Se falhar, toma o dano de sanidade igual ao número de PE gastos para fazer o ritual.";
+    private String danoSanidade;
     private int circulo;
+
+    public String getDanoSanidade() {
+        return "Fazer um teste de ocultismo (DT = 20+qtd de PE gastos). Se falhar, toma o dano de sanidade igual ao número de PE gastos para fazer o ritual.";
+    }
 }
