@@ -68,4 +68,19 @@ public class FichaRepository {
                 .document(id)
                 .delete().get();
     }
+
+    public List<FichaUsuarioDTO> obterFichasPorCampanha(String nomeCampanha) throws ExecutionException, InterruptedException  {
+        ApiFuture<QuerySnapshot> fichas = getCollection()
+                .whereEqualTo("nomeCampanha", nomeCampanha)
+                .get();
+
+        return fichas
+                .get()
+                .getDocuments()
+                .stream().map(f -> {
+                    Ficha o = f.toObject(Ficha.class);
+
+                    return FichaUsuarioDTO.from(o);
+                }).toList();
+    }
 }

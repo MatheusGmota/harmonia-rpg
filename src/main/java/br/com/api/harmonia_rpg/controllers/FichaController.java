@@ -26,8 +26,11 @@ public class FichaController {
     }
 
     @GetMapping("/usuario")
-    public ResponseEntity<Object> getByUser(@RequestParam("id-usuario") String idUsuario) {
-        List<FichaUsuarioDTO> resposta = service.obterFichasDoUsuario(idUsuario);
+    public ResponseEntity<Object> getByUser(
+            @RequestParam("id-usuario") String idUsuario,
+            @RequestParam(value = "nome-campanha", required = false) String nomeCampanha
+    ) {
+        List<FichaUsuarioDTO> resposta = service.obterFichasDoUsuario(idUsuario, nomeCampanha);
         return ResponseEntity.ok(resposta);
     }
 

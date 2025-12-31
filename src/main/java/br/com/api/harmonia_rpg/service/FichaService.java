@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +49,20 @@ public class FichaService {
         }
     }
 
-    public List<FichaUsuarioDTO> obterFichasDoUsuario(String idUsuario) {
+    public List<FichaUsuarioDTO> obterFichasDoUsuario(String idUsuario, String nomeCampanha) {
         try {
-            usuarioService.obterUsuarioPorId(idUsuario); // Chamada para validar usuario existente
+            UsuarioResponseDTO usuario = usuarioService.obterUsuarioPorId(idUsuario); // Chamada para validar usuario existente
 
-            List<FichaUsuarioDTO> fichasDoUsuario = db.obterFichasDoUsuario(idUsuario);
+            List<FichaUsuarioDTO> fichasDoUsuario = new ArrayList<>();
+
+            if (usuario.tipoUsuario().equals(TipoUsuario.MESTRE)){
+                if (nomeCampanha == null) {
+                    throw new NullPointerException("Necessário especificar o nome da campanha");
+                }
+                fichasDoUsuario = db.obterFichasPorCampanha(nomeCampanha.toUpperCase());
+            } else {
+                fichasDoUsuario = db.obterFichasDoUsuario(idUsuario);
+            }
 
             if (fichasDoUsuario.isEmpty()) throw new NotFoundException("Nenhuma ficha encontrada para esse usuário");
 
