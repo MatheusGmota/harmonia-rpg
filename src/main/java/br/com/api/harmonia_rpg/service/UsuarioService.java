@@ -44,7 +44,7 @@ public class UsuarioService {
             Usuario user = (Usuario) auth.getPrincipal();
             var token = tokenService.generateToken((Usuario) Objects.requireNonNull(auth.getPrincipal()));
 
-            return new UsuarioTokenResponseDTO(user.getId(), user.getUsername(), token, user.getCriadoEm());
+            return new UsuarioTokenResponseDTO(user.getId(), user.getUsername(), user.getTipoUsuario(),token, user.getCriadoEm());
         } catch (AuthenticationException e) {
             log.error(e.getMessage());
             throw new UsernameNotFoundException(e.getMessage());
@@ -73,6 +73,7 @@ public class UsuarioService {
             return new UsuarioTokenResponseDTO(
                     usuarioSalvo.getId(),
                     usuarioSalvo.getNomeUsuario(),
+                    usuarioSalvo.getTipoUsuario(),
                     token,
                     usuarioSalvo.getCriadoEm()
             );
