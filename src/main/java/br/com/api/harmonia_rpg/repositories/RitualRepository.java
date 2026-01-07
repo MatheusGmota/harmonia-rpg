@@ -61,7 +61,7 @@ public class RitualRepository {
         }
 
         Map<String, Object> data = new HashMap<>();
-        data.put("rituais", rituais);
+        data.put(COLLECTION_NAME, rituais);
 
         getCollection()
                 .document(idFicha)
