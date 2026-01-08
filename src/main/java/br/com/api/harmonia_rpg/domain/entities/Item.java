@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Item {
     private String nomeItem;
-    private Categoria categoria;
-    private int espacoCarga;
+    private String categoria;
+    private int espacos;
     private String descricao;
 
 

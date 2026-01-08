@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Carga {
-    private int cargaAtual;
-    private int cargaTotal;
+    private int atual;
+    private int total;
 }
