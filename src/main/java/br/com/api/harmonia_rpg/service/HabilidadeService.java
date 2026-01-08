@@ -1,6 +1,7 @@
 package br.com.api.harmonia_rpg.service;
 
 import br.com.api.harmonia_rpg.domain.entities.Habilidade;
+import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.repositories.HabilidadeRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -36,7 +37,11 @@ public class HabilidadeService {
 
     public List<Habilidade> create(String idFicha, Habilidade ritual) {
         try {
-            fichaService.obterFicha(idFicha); // verifica se a ficha existe
+            DocumentSnapshot document = repository.obterDocumento(idFicha);
+
+            if (document.exists()) {
+                throw new BusinessException("Habilidades já existem para a ficha: " + idFicha);
+            }
 
             List<Habilidade> habilidades;
 
