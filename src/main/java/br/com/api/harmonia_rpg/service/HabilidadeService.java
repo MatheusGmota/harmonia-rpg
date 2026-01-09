@@ -37,11 +37,7 @@ public class HabilidadeService {
 
     public List<Habilidade> create(String idFicha, Habilidade ritual) {
         try {
-            DocumentSnapshot document = repository.obterDocumento(idFicha);
-
-            if (document.exists()) {
-                throw new BusinessException("Habilidades já existem para a ficha: " + idFicha);
-            }
+            fichaService.obterFicha(idFicha); // verifica se a ficha existe
 
             List<Habilidade> habilidades;
 
