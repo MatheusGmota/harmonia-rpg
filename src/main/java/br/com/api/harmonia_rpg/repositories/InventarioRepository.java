@@ -37,4 +37,8 @@ public class InventarioRepository {
         return getCollection().document(idFicha).get().get();
 
     }
+
+    public void update(String idFicha, Inventario inventario) throws ExecutionException, InterruptedException {
+        getCollection().document(idFicha).set(inventario).get();
+    }
 }

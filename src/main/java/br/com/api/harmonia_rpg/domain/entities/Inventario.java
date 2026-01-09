@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,14 +24,46 @@ public class Inventario {
 
     private List<Item> itens;
 
-    public void setCargaAtual() {
-        try {
-            this.carga.setAtual(this.itens.toArray().length);
+    public void setItens(List<Item> itens) {
+        this.itens = (itens != null) ? itens : new ArrayList<>();
+        atualizarCargaAtual();
+    }
+
+    // Método de negócio para adicionar item
+    public void adicionarItem(Item item) {
+        if (this.itens == null) this.itens = new ArrayList<>();
+        this.itens.add(item);
+        atualizarCargaAtual();
+    }
+
+    // Lógica centralizada de cálculo por espaços
+    private void atualizarCargaAtual() {
+        if (this.carga != null) {
+            int totalEspacos = this.itens.stream()
+                    .mapToInt(Item::getEspacos)
+                    .sum();
+
+            this.carga.setAtual(totalEspacos);
+
+            // Opcional: Log ou flag de sobrecarga
             if (this.carga.getAtual() > this.carga.getTotal()) {
-                throw new IllegalArgumentException("Seus itens excederam sua carga máxima, você terá penalidades ao se movimentar");
+                // Aqui você pode definir uma lógica de penalidade
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+    }
+
+    public void removerItem(String nomeItem) {
+        this.itens.removeIf(item -> item.getNomeItem().equalsIgnoreCase(nomeItem));
+        atualizarCargaAtual();
+    }
+
+    public void editarItem(String nomeItemAntigo, Item itemAtualizado) {
+        for (int i = 0; i < itens.size(); i++) {
+            if (itens.get(i).getNomeItem().equalsIgnoreCase(nomeItemAntigo)) {
+                itens.set(i, itemAtualizado);
+                break;
+            }
+        }
+        atualizarCargaAtual();
     }
 }
