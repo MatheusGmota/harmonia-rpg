@@ -38,7 +38,7 @@ public class InventarioController {
         return ResponseEntity.ok(service.adicionarItem(idFicha, novoItem));
     }
 
-    @PutMapping("/{itens/{nomeItem}")
+    @PutMapping("/itens/{nomeItem}")
     public ResponseEntity<InventarioResponseDTO> editarItem(
             @PathVariable String idFicha,
             @PathVariable String nomeItem,
