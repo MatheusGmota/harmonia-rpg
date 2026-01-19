@@ -31,11 +31,11 @@ public class FichaService {
     private UsuarioService usuarioService;
 
     @Autowired
-    private FichaRepository db;
+    private FichaRepository repository;
 
     public FichaResponseDTO obterFicha(String id) {
         try {
-            DocumentSnapshot fichas = db.obterFichaPorId(id);
+            DocumentSnapshot fichas = repository.obterFichaPorId(id);
 
             if (!fichas.exists()) {
                 log.warn("Nenhuma ficha encontrada");
@@ -59,9 +59,9 @@ public class FichaService {
                 if (nomeCampanha == null) {
                     throw new NullPointerException("Necessário especificar o nome da campanha");
                 }
-                fichasDoUsuario = db.obterFichasPorCampanha(nomeCampanha.toUpperCase());
+                fichasDoUsuario = repository.obterFichasPorCampanha(nomeCampanha.toUpperCase());
             } else {
-                fichasDoUsuario = db.obterFichasDoUsuario(idUsuario);
+                fichasDoUsuario = repository.obterFichasDoUsuario(idUsuario);
             }
 
             if (fichasDoUsuario.isEmpty()) throw new NotFoundException("Nenhuma ficha encontrada para esse usuário");
@@ -83,7 +83,7 @@ public class FichaService {
                 throw new IllegalArgumentException("A trilha selecionada não pertence à classe do personagem.");
             }
 
-            DocumentSnapshot adicionar = db.adicionar(ficha).get();
+            DocumentSnapshot adicionar = repository.adicionar(ficha).get();
 
             return adicionar.toObject(FichaResponseDTO.class);
         } catch (InterruptedException | ExecutionException e) {
@@ -106,7 +106,7 @@ public class FichaService {
                 }
             }
 
-            WriteResult atualizar = db.atualizar(id, FichaMapper.toFicha(dto, fichaResponse.idUsuario()));
+            WriteResult atualizar = repository.atualizar(id, FichaMapper.toFicha(dto, fichaResponse.idUsuario()));
 
             return Map.of("message", "Atualizado com sucesso", "atualizadoEm", atualizar.getUpdateTime());
         } catch (InterruptedException | ExecutionException e) {
@@ -126,7 +126,7 @@ public class FichaService {
                 log.warn("A ficha não pertence ao usuário");
                 throw new BusinessException("Este usuário não pode editar essa ficha");
             }
-            WriteResult deletar = db.deletar(id);
+            WriteResult deletar = repository.deletar(id);
 
             log.info("Usuário id:{} deletado em: {}", id, deletar.getUpdateTime());
 
@@ -139,7 +139,7 @@ public class FichaService {
 
     public void patchFicha(String idFicha, String idUsuario, Map<String, Object> updates) {
         try {
-            DocumentSnapshot doc = db.obterFichaPorId(idFicha);
+            DocumentSnapshot doc = repository.obterFichaPorId(idFicha);
 
             if (!doc.exists()) {
                 throw new BusinessException("Ficha não encontrada");
@@ -158,7 +158,7 @@ public class FichaService {
                 throw new BusinessException("Nenhum campo válido para atualização");
             }
 
-            db.atualizarParcial(idFicha, safeUpdates);
+            repository.atualizarParcial(idFicha, safeUpdates);
 
         } catch (InterruptedException | ExecutionException e) {
             log.error(e.getMessage(), e);

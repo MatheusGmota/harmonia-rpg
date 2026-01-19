@@ -34,7 +34,7 @@ public class UsuarioService {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository db;
+    private UsuarioRepository repository;
 
     public UsuarioTokenResponseDTO login(LoginRequestDTO requisicao) {
         try {
@@ -61,7 +61,7 @@ public class UsuarioService {
             // Encriptando senha
             usuario.setSenha(encriptarSenha(usuario.getSenha()));
 
-            Usuario usuarioSalvo = db.salvar(usuario).get().toObject(Usuario.class);
+            Usuario usuarioSalvo = repository.salvar(usuario).get().toObject(Usuario.class);
 
             if (usuarioSalvo == null) {
                 throw new RuntimeException("Erro ao recuperar usuário após o salvamento.");
@@ -87,7 +87,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO obterUsuarioPorId(String id) {
         try {
-            DocumentSnapshot usuarioPorId = db.obterUsuarioPorId(id);
+            DocumentSnapshot usuarioPorId = repository.obterUsuarioPorId(id);
 
             if (!usuarioPorId.exists()) {
                 log.error("Não existe usuário para id: {}", id);
@@ -119,7 +119,7 @@ public class UsuarioService {
                 map.put("senha", usuario.getSenha());
             }
 
-            WriteResult atualizar = db.atualizar(id, map);
+            WriteResult atualizar = repository.atualizar(id, map);
 
             log.info("Usuário id:{} atualizado em: {}", id, atualizar.getUpdateTime());
 
@@ -136,7 +136,7 @@ public class UsuarioService {
             verificaUsuario(id, token); // verifica se usuario existe pelo id
                                         // e caso exista, verifica se está permitido editar
 
-            WriteResult deletar = db.deletar(id);
+            WriteResult deletar = repository.deletar(id);
 
             log.info("Usuário id:{} deletado em: {}", id, deletar.getUpdateTime());
 
@@ -157,7 +157,7 @@ public class UsuarioService {
                 updates.put("senha", encriptarSenha(senha)); // Encriptando senha
             }
 
-            WriteResult atualizar = db.atualizarUsuarioParcial(id, updates);
+            WriteResult atualizar = repository.atualizarUsuarioParcial(id, updates);
             return Map.of("message", "Atualizado com sucesso", "atualizadoEm", atualizar.getUpdateTime());
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -179,7 +179,7 @@ public class UsuarioService {
     }
 
     private void validarNomeUsuario(String nomeUsuario, String mensagemErro)  {
-        Usuario existente = db.buscarPorNomeUsuario(nomeUsuario); // Caso nomeUsuário não exista irá retornar nulo
+        Usuario existente = repository.buscarPorNomeUsuario(nomeUsuario); // Caso nomeUsuário não exista irá retornar nulo
 
         if (existente != null) {
             throw new UserAlreadyExistsException(mensagemErro);
