@@ -1,5 +1,6 @@
 package br.com.api.harmonia_rpg.controllers;
 
+import br.com.api.harmonia_rpg.domain.dtos.AtaqueEditRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueResponseDTO;
 import br.com.api.harmonia_rpg.service.AtaqueService;
@@ -34,17 +35,16 @@ public class AtaqueController {
     @PutMapping
     public ResponseEntity<List<AtaqueResponseDTO>> put(
             @PathVariable String idFicha,
-            int index,
-            @RequestBody AtaqueRequestDTO request
+            @RequestBody AtaqueEditRequestDTO request
     ) {
-        return ResponseEntity.ok(service.editar(idFicha, index, request));
+        return ResponseEntity.ok(service.editar(idFicha, request));
     }
 
     @DeleteMapping
     public ResponseEntity<List<AtaqueResponseDTO>> delete(
             @PathVariable String idFicha,
-            int index
+            @RequestBody AtaqueEditRequestDTO request
     ) {
-        return ResponseEntity.ok(service.remover(idFicha, index));
+        return ResponseEntity.ok(service.remover(idFicha, request));
     }
 }

@@ -1,5 +1,6 @@
 package br.com.api.harmonia_rpg.service;
 
+import br.com.api.harmonia_rpg.domain.dtos.AtaqueEditRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueResponseDTO;
 import br.com.api.harmonia_rpg.domain.entities.Ataque;
@@ -48,7 +49,7 @@ public class AtaqueService {
         }
     }
 
-    public List<AtaqueResponseDTO> editar(String idFicha, int index, AtaqueRequestDTO request) {
+    public List<AtaqueResponseDTO> editar(String idFicha, AtaqueEditRequestDTO request) {
         try {
             if (request == null) throw new BusinessException("Objeto não pode ser nulo");
             Ataque ataque = AtaqueMapper.toAtaque(request);
@@ -58,10 +59,10 @@ public class AtaqueService {
                 throw new NotFoundException("Não existe nenhuma lista de habilidades");
             }
 
-            Ataque ataqueRecuperado = ataques.get(index);
+            Ataque ataqueRecuperado = ataques.get(request.index());
             if (ataqueRecuperado.equals(ataque)) return AtaqueMapper.toDtoList(ataques);
 
-            ataques.set(index, ataque);
+            ataques.set(request.index(), ataque);
 
             List<Ataque> res = repository.salvar(idFicha, ataques);
             return AtaqueMapper.toDtoList(res);
@@ -72,14 +73,14 @@ public class AtaqueService {
         }
     }
 
-    public List<AtaqueResponseDTO> remover(String idFicha, int index) {
+    public List<AtaqueResponseDTO> remover(String idFicha, AtaqueEditRequestDTO request) {
         try {
             List<Ataque> ataques = repository.obterAtaques(idFicha);
             if (ataques.isEmpty()) {
                 throw new NotFoundException("Não existe nenhuma lista de habilidades");
             }
 
-            Ataque ataqueRecuperado = ataques.get(index);
+            Ataque ataqueRecuperado = ataques.get(request.index());
 
             ataques.remove(ataqueRecuperado);
 
