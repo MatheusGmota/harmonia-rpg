@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.FichaRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.FichaResponseDTO;
@@ -9,7 +9,7 @@ import br.com.api.harmonia_rpg.domain.enums.TipoUsuario;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.mapper.FichaMapper;
-import br.com.api.harmonia_rpg.repositories.FichaRepository;
+import br.com.api.harmonia_rpg.repositories.v1.FichaRepository;
 import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

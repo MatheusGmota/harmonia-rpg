@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.*;
 import br.com.api.harmonia_rpg.domain.entities.Usuario;
@@ -7,7 +7,7 @@ import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.exceptions.UserAlreadyExistsException;
 import br.com.api.harmonia_rpg.domain.mapper.UsuarioMapper;
 import br.com.api.harmonia_rpg.infra.security.TokenService;
-import br.com.api.harmonia_rpg.repositories.UsuarioRepository;
+import br.com.api.harmonia_rpg.repositories.v1.UsuarioRepository;
 import com.google.cloud.firestore.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

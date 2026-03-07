@@ -1,6 +1,7 @@
 package br.com.api.harmonia_rpg.domain.entities;
 
 import br.com.api.harmonia_rpg.domain.enums.TipoElemento;
+import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ritual {
+    @DocumentId
+    private String idRitual;
+
     private String nomeRitual;
     private TipoElemento tipoElemento;
     private CustoRitual custoRitual;

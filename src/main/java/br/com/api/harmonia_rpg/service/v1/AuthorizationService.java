@@ -1,6 +1,6 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
-import br.com.api.harmonia_rpg.repositories.UsuarioRepository;
+import br.com.api.harmonia_rpg.repositories.v1.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

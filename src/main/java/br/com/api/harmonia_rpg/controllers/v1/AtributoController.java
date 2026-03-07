@@ -1,8 +1,8 @@
-package br.com.api.harmonia_rpg.controllers;
+package br.com.api.harmonia_rpg.controllers.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.AtributoResponseDTO;
 import br.com.api.harmonia_rpg.domain.entities.Atributos;
-import br.com.api.harmonia_rpg.service.AtributoService;
+import br.com.api.harmonia_rpg.service.v1.AtributoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

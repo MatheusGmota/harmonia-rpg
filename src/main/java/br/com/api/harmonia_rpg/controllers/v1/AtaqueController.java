@@ -1,9 +1,9 @@
-package br.com.api.harmonia_rpg.controllers;
+package br.com.api.harmonia_rpg.controllers.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueEditRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueResponseDTO;
-import br.com.api.harmonia_rpg.service.AtaqueService;
+import br.com.api.harmonia_rpg.service.v1.AtaqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

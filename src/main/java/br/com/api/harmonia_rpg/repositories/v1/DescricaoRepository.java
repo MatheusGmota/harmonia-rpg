@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.repositories;
+package br.com.api.harmonia_rpg.repositories.v1;
 
 import br.com.api.harmonia_rpg.domain.entities.Descricao;
 import com.google.api.core.ApiFuture;

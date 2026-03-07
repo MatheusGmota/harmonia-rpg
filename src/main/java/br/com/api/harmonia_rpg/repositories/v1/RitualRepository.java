@@ -1,10 +1,8 @@
-package br.com.api.harmonia_rpg.repositories;
+package br.com.api.harmonia_rpg.repositories.v1;
 
-import br.com.api.harmonia_rpg.domain.entities.Habilidade;
-import br.com.api.harmonia_rpg.domain.wrapper.HabilidadeWrapper;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
+import br.com.api.harmonia_rpg.domain.entities.Ritual;
+import br.com.api.harmonia_rpg.domain.wrapper.RituaisWrapper;
+import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Repository
-public class HabilidadeRepository {
+public class RitualRepository {
 
-    private static final String COLLECTION_NAME = "habilidades";
+    private static final String COLLECTION_NAME = "rituais";
 
     @Autowired
     private Firestore db;
@@ -38,7 +36,7 @@ public class HabilidadeRepository {
         return getCollection().document(idFicha).get().get().exists();
     }
 
-    public List<Habilidade> obterHabilidades(String idFicha)
+    public List<Ritual> obterRituais(String idFicha)
             throws ExecutionException, InterruptedException {
 
         DocumentSnapshot document =
@@ -48,28 +46,29 @@ public class HabilidadeRepository {
             return new ArrayList<>();
         }
 
-        List<Habilidade> habilidades = document.toObject(HabilidadeWrapper.class) != null
-                ? document.toObject(HabilidadeWrapper.class).getHabilidades()
+        List<Ritual> rituais = document.toObject(RituaisWrapper.class) != null
+                ? document.toObject(RituaisWrapper.class).getRituais()
                 : null;
 
-        return habilidades != null ? new ArrayList<>(habilidades) : new ArrayList<>();
+        return rituais != null ? new ArrayList<>(rituais) : new ArrayList<>();
     }
 
-    public List<Habilidade> salvar(String idFicha, List<Habilidade> habilidades)
+    public List<Ritual> salvar(String idFicha, List<Ritual> rituais)
             throws ExecutionException, InterruptedException {
 
-        if (habilidades == null) {
-            habilidades = new ArrayList<>();
+        if (rituais == null) {
+            rituais = new ArrayList<>();
         }
 
         Map<String, Object> data = new HashMap<>();
-        data.put(COLLECTION_NAME, habilidades);
+        data.put(COLLECTION_NAME, rituais);
 
         getCollection()
                 .document(idFicha)
                 .set(data)
                 .get();
 
-        return habilidades;
+        return rituais;
     }
 }
+

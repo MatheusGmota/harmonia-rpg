@@ -1,24 +1,17 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.InventarioRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.InventarioResponseDTO;
-import br.com.api.harmonia_rpg.domain.entities.Ficha;
 import br.com.api.harmonia_rpg.domain.entities.Inventario;
 import br.com.api.harmonia_rpg.domain.entities.Item;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.mapper.InventarioMapper;
-import br.com.api.harmonia_rpg.repositories.FichaRepository;
-import br.com.api.harmonia_rpg.repositories.InventarioRepository;
+import br.com.api.harmonia_rpg.repositories.v1.InventarioRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service

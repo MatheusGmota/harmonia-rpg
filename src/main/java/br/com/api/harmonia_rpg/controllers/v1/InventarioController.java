@@ -1,9 +1,9 @@
-package br.com.api.harmonia_rpg.controllers;
+package br.com.api.harmonia_rpg.controllers.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.InventarioRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.InventarioResponseDTO;
 import br.com.api.harmonia_rpg.domain.entities.Item;
-import br.com.api.harmonia_rpg.service.InventarioService;
+import br.com.api.harmonia_rpg.service.v1.InventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

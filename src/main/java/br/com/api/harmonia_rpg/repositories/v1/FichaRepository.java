@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.repositories;
+package br.com.api.harmonia_rpg.repositories.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.FichaUsuarioDTO;
 import br.com.api.harmonia_rpg.domain.entities.Ficha;

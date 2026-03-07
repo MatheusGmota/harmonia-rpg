@@ -1,10 +1,10 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.DescricaoResponseDTO;
 import br.com.api.harmonia_rpg.domain.entities.Descricao;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.exceptions.ObjectAlreadyExistsException;
-import br.com.api.harmonia_rpg.repositories.DescricaoRepository;
+import br.com.api.harmonia_rpg.repositories.v1.DescricaoRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

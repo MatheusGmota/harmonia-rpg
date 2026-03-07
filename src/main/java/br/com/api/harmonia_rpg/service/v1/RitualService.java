@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.RitualEditRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.RitualResponseDTO;
@@ -6,7 +6,7 @@ import br.com.api.harmonia_rpg.domain.entities.Ritual;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.mapper.RitualMapper;
-import br.com.api.harmonia_rpg.repositories.RitualRepository;
+import br.com.api.harmonia_rpg.repositories.v1.RitualRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

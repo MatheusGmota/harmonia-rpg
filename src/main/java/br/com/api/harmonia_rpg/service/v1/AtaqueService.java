@@ -1,4 +1,4 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueEditRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.AtaqueRequestDTO;
@@ -7,7 +7,7 @@ import br.com.api.harmonia_rpg.domain.entities.Ataque;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.mapper.AtaqueMapper;
-import br.com.api.harmonia_rpg.repositories.AtaqueRepository;
+import br.com.api.harmonia_rpg.repositories.v1.AtaqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

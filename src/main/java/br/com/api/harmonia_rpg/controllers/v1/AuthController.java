@@ -1,9 +1,9 @@
-package br.com.api.harmonia_rpg.controllers;
+package br.com.api.harmonia_rpg.controllers.v1;
 
 import br.com.api.harmonia_rpg.domain.dtos.CadastroRequestDTO;
 import br.com.api.harmonia_rpg.domain.dtos.UsuarioTokenResponseDTO;
 import br.com.api.harmonia_rpg.domain.dtos.LoginRequestDTO;
-import br.com.api.harmonia_rpg.service.UsuarioService;
+import br.com.api.harmonia_rpg.service.v1.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

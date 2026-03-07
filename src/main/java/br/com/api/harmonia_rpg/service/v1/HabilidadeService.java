@@ -1,9 +1,8 @@
-package br.com.api.harmonia_rpg.service;
+package br.com.api.harmonia_rpg.service.v1;
 
 import br.com.api.harmonia_rpg.domain.entities.Habilidade;
-import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
-import br.com.api.harmonia_rpg.repositories.HabilidadeRepository;
+import br.com.api.harmonia_rpg.repositories.v1.HabilidadeRepository;
 import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

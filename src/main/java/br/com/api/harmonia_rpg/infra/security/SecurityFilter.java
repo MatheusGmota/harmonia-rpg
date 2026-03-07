@@ -1,6 +1,6 @@
 package br.com.api.harmonia_rpg.infra.security;
 
-import br.com.api.harmonia_rpg.service.AuthorizationService;
+import br.com.api.harmonia_rpg.service.v1.AuthorizationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
