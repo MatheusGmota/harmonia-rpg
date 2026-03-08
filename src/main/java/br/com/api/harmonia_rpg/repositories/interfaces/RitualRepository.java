@@ -10,7 +10,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public interface RitualRepository {
-    boolean existeRitual(String idFicha, String nomeRitual)
+    boolean existeRitual(String idFicha, String idRitual)
+            throws ExecutionException, InterruptedException;
+
+    boolean existeRitualPorNome(String idFicha, String nomeRitual)
             throws ExecutionException, InterruptedException;
 
     DocumentReference adicionarRitual(String idFicha, Ritual ritual)
@@ -20,5 +23,8 @@ public interface RitualRepository {
             throws ExecutionException, InterruptedException;
 
     WriteResult atualizarParcialRitual(String idFicha, String idRitual, Map<String, Object> updates)
+            throws ExecutionException, InterruptedException;
+
+    void deletarRitual(String idFicha, String idRitual)
             throws ExecutionException, InterruptedException;
 }

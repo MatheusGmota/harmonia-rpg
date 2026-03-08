@@ -40,4 +40,12 @@ public class RitualController {
         service.partialUpdate(idFicha, idRitual, updates);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(
+            @PathVariable String idFicha,
+            @RequestParam("id-ritual") String idRitual) {
+        service.delete(idFicha, idRitual);
+        return ResponseEntity.ok().build();
+    }
 }

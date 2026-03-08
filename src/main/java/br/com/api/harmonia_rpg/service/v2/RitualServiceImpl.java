@@ -2,6 +2,7 @@ package br.com.api.harmonia_rpg.service.v2;
 
 import br.com.api.harmonia_rpg.domain.entities.Ritual;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
+import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.repositories.interfaces.RitualRepository;
 import br.com.api.harmonia_rpg.service.interfaces.RitualService;
 import br.com.api.harmonia_rpg.service.v1.FichaService;
@@ -33,7 +34,7 @@ public class RitualServiceImpl implements RitualService {
             fichaService.obterFicha(idFicha); // verifica se ficha existe
 
             // caso ficha exista, verifica se já existe um ritual pelo nome
-            if (repository.existeRitual(idFicha, ritual.getNomeRitual())) {
+            if (repository.existeRitualPorNome(idFicha, ritual.getNomeRitual())) {
                 throw new BusinessException("Ritual com esse nome já existe");
             }
 
@@ -61,6 +62,9 @@ public class RitualServiceImpl implements RitualService {
         try {
             fichaService.obterFicha(idFicha); // verifica se ficha existe
 
+            if (!repository.existeRitual(idFicha, idRitual))
+                throw new NotFoundException("Ritual não encontrado"); // verifica se ritual existe
+
             Map<String, Object> flattenedUpdates = flattenMap(updates, "");
 
             // Remove campos inválidos ou inexistentes
@@ -76,9 +80,17 @@ public class RitualServiceImpl implements RitualService {
         }
     }
 
-    public Ritual delete(String idFicha, Ritual ritual) {
-        return null;
-    }
+    public void delete(String idFicha, String idRitual) {
+        try {
+            fichaService.obterFicha(idFicha); // verifica se ficha existe
 
+            if (!repository.existeRitual(idFicha, idRitual))
+                throw new NotFoundException("Ritual não encontrado"); // verifica se ritual existe
+
+            repository.deletarRitual(idFicha, idRitual);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

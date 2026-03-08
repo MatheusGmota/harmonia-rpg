@@ -9,5 +9,5 @@ public interface RitualService {
     Ritual create(String idFicha, Ritual ritual);
     List<Ritual> get(String idFicha);
     void partialUpdate(String idFicha, String idRitual, Map<String, Object> updates);
-    Ritual delete(String idFicha, Ritual ritual);
+    void delete(String idFicha, String idRitual);
 }

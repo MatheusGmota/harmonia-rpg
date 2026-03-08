@@ -28,7 +28,13 @@ public class RitualRepositoryImpl implements RitualRepository {
                 .collection(SUB_COLLECTION);
     }
 
-    public boolean existeRitual(String idFicha, String nomeRitual)
+    public boolean existeRitual(String idFicha, String idRitual) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> future = getRituaisCollection(idFicha).document(idRitual).get();
+
+        return future.get().exists();
+    }
+
+    public boolean existeRitualPorNome(String idFicha, String nomeRitual)
             throws ExecutionException, InterruptedException {
 
         // Query para retornar todos os rituais com o nomeRitual
@@ -63,5 +69,9 @@ public class RitualRepositoryImpl implements RitualRepository {
         return ritualDocument
                 .update(updates)
                 .get();
+    }
+
+    public void deletarRitual(String idFicha, String idRitual) {
+        getRituaisCollection(idFicha).document(idRitual).delete();
     }
 }
