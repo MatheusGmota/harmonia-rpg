@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v2/ficha/{idFicha}/rituais")
@@ -28,5 +29,15 @@ public class RitualController {
             @RequestBody Ritual ritual) throws Exception {
 
         return ResponseEntity.ok(service.create(idFicha, ritual));
+    }
+
+    @PatchMapping
+    public ResponseEntity<Void> patch(
+            @PathVariable String idFicha,
+            @RequestParam("id-ritual") String idRitual,
+            @RequestBody Map<String, Object> updates) {
+
+        service.partialUpdate(idFicha, idRitual, updates);
+        return ResponseEntity.noContent().build();
     }
 }

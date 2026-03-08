@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static br.com.api.harmonia_rpg.tools.UpdateTool.filterValidFields;
+import static br.com.api.harmonia_rpg.tools.UpdateTool.flattenMap;
 
 @Service
 public class RitualServiceImpl implements RitualService {
@@ -53,12 +57,25 @@ public class RitualServiceImpl implements RitualService {
         }
     }
 
-    @Override
-    public Ritual update(String idFicha, Ritual ritual) {
-        return null;
+    public void partialUpdate(String idFicha, String idRitual, Map<String, Object> updates) {
+        try {
+            fichaService.obterFicha(idFicha); // verifica se ficha existe
+
+            Map<String, Object> flattenedUpdates = flattenMap(updates, "");
+
+            // Remove campos inválidos ou inexistentes
+            Map<String, Object> safeUpdates = filterValidFields(flattenedUpdates, Ritual.class);
+
+            if (safeUpdates.isEmpty()) {
+                throw new BusinessException("Nenhum campo válido para atualização");
+            }
+            repository.atualizarParcialRitual(idFicha, idRitual, updates);
+
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
     public Ritual delete(String idFicha, Ritual ritual) {
         return null;
     }

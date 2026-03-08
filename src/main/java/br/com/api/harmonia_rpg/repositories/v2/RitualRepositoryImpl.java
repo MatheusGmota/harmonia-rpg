@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -51,5 +52,16 @@ public class RitualRepositoryImpl implements RitualRepository {
     public List<QueryDocumentSnapshot> obterRituais(String idFicha) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = getRituaisCollection(idFicha).get();
         return future.get().getDocuments();
+    }
+
+    public WriteResult atualizarParcialRitual(
+            String idFicha,
+            String idRitual,
+            Map<String, Object> updates) throws ExecutionException, InterruptedException {
+        DocumentReference ritualDocument = getRituaisCollection(idFicha).document(idRitual);
+
+        return ritualDocument
+                .update(updates)
+                .get();
     }
 }
