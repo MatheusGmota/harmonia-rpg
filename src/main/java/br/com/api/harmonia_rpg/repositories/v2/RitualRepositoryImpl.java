@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -27,7 +28,13 @@ public class RitualRepositoryImpl implements RitualRepository {
                 .collection(SUB_COLLECTION);
     }
 
-    public boolean existeRitual(String idFicha, String nomeRitual)
+    public boolean existeRitual(String idFicha, String idRitual) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> future = getRituaisCollection(idFicha).document(idRitual).get();
+
+        return future.get().exists();
+    }
+
+    public boolean existeRitualPorNome(String idFicha, String nomeRitual)
             throws ExecutionException, InterruptedException {
 
         // Query para retornar todos os rituais com o nomeRitual
@@ -51,5 +58,20 @@ public class RitualRepositoryImpl implements RitualRepository {
     public List<QueryDocumentSnapshot> obterRituais(String idFicha) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = getRituaisCollection(idFicha).get();
         return future.get().getDocuments();
+    }
+
+    public WriteResult atualizarParcialRitual(
+            String idFicha,
+            String idRitual,
+            Map<String, Object> updates) throws ExecutionException, InterruptedException {
+        DocumentReference ritualDocument = getRituaisCollection(idFicha).document(idRitual);
+
+        return ritualDocument
+                .update(updates)
+                .get();
+    }
+
+    public void deletarRitual(String idFicha, String idRitual) {
+        getRituaisCollection(idFicha).document(idRitual).delete();
     }
 }
