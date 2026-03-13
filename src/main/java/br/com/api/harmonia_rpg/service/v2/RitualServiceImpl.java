@@ -69,6 +69,7 @@ public class RitualServiceImpl implements RitualService {
 
             // Remove campos inválidos ou inexistentes
             Map<String, Object> safeUpdates = filterValidFields(flattenedUpdates, Ritual.class);
+            safeUpdates.remove("idRitual");
 
             if (safeUpdates.isEmpty()) {
                 throw new BusinessException("Nenhum campo válido para atualização");
