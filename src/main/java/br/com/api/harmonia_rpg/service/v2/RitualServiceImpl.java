@@ -74,7 +74,7 @@ public class RitualServiceImpl implements RitualService {
             if (safeUpdates.isEmpty()) {
                 throw new BusinessException("Nenhum campo válido para atualização");
             }
-            repository.atualizarParcialRitual(idFicha, idRitual, updates);
+            repository.atualizarParcialRitual(idFicha, idRitual, safeUpdates);
 
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
