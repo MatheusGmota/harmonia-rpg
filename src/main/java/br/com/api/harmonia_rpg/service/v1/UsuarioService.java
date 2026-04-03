@@ -110,6 +110,7 @@ public class UsuarioService {
             Usuario usuario = UsuarioMapper.from(requisicao);
 
             validarNomeUsuario(usuario.getNomeUsuario(), "Nome de usuário já utilizado");
+            log.info("Validado nome usuário");
 
             HashMap<String, Object> map = new HashMap<>();
             map.put("nomeUsuario", usuario.getNomeUsuario());
@@ -149,6 +150,11 @@ public class UsuarioService {
     public Map<String, Object> editarParcialUsuario(String id, String token, Map<String, Object> updates) {
         try {
             verificaUsuario(id, token);
+
+            if (updates.get("nomeUsuario") != null) {
+                validarNomeUsuario(updates.get("nomeUsuario").toString(), "Nome de usuário já utilizado");
+                log.info("Validado nome usuário");
+            }
 
             if (updates.get("senha") != null) {
                 String senha = updates.get("senha").toString();
