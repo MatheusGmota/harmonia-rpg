@@ -71,9 +71,6 @@ public class RitualServiceImpl implements RitualService {
             Map<String, Object> safeUpdates = filterValidFields(flattenedUpdates, Ritual.class);
             safeUpdates.remove("idRitual");
 
-            if (safeUpdates.isEmpty()) {
-                throw new BusinessException("Nenhum campo válido para atualização");
-            }
             repository.atualizarParcialRitual(idFicha, idRitual, safeUpdates);
 
         } catch (ExecutionException | InterruptedException e) {

@@ -1,5 +1,6 @@
 package br.com.api.harmonia_rpg.tools;
 
+import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -36,6 +37,10 @@ public interface UpdateTool {
                 validUpdates.put(path, value);
             }
         });
+
+        if (validUpdates.isEmpty()) {
+            throw new BusinessException("Nenhum campo válido para atualização");
+        }
 
         return validUpdates;
     }
