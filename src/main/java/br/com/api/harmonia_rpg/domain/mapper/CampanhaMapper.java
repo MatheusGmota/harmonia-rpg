@@ -16,7 +16,7 @@ public class CampanhaMapper {
      * Converte o RequestDTO em entidade Campanha.
      * O {@code idMestre} é sempre o usuário autenticado, nunca vindo do payload.
      */
-    public static Campanha toCampanha(CampanhaDTO.RequestDTO dto, String idMestre) {
+    public static Campanha toCampanha(CampanhaDTO.CampanhaRequestDTO dto, String idMestre) {
         Campanha campanha = new Campanha();
         campanha.setNome(dto.nome());
         campanha.setDescricao(dto.descricao());
@@ -33,9 +33,9 @@ public class CampanhaMapper {
      * O campo {@code papel} é calculado com base no usuário logado:
      * "MESTRE" se for o criador da campanha, "JOGADOR" caso contrário.
      */
-    public static CampanhaDTO.ResponseDTO toResponseDTO(Campanha campanha, String idUsuarioLogado) {
+    public static CampanhaDTO.CampanhaResponseDTO toResponseDTO(Campanha campanha, String idUsuarioLogado) {
         String papel = campanha.getIdMestre().equals(idUsuarioLogado) ? "MESTRE" : "JOGADOR";
-        return new CampanhaDTO.ResponseDTO(
+        return new CampanhaDTO.CampanhaResponseDTO(
                 campanha.getId(),
                 campanha.getNome(),
                 campanha.getDescricao(),
@@ -53,9 +53,9 @@ public class CampanhaMapper {
     /**
      * Converte Convite em ResponseDTO montando o link completo a partir da baseUrl.
      */
-    public static ConviteDTO.ResponseDTO toConviteResponseDTO(Convite convite, String baseUrl) {
+    public static ConviteDTO.ConviteResponseDTO toConviteResponseDTO(Convite convite, String baseUrl) {
         String linkConvite = baseUrl + "/" + convite.getToken();
-        return new ConviteDTO.ResponseDTO(
+        return new ConviteDTO.ConviteResponseDTO(
                 convite.getId(),
                 convite.getIdCampanha(),
                 convite.getNomeCampanha(),

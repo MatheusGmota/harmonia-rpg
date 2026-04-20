@@ -32,7 +32,7 @@ public class RitualServiceImpl implements RitualService {
     private RitualRepositoryImpl repository;
 
     @Override
-    public RitualDTO.ResponseDTO criar(String idUsuario, String idFicha, RitualDTO.RequestDTO dto) {
+    public RitualDTO.RitualResponseDTO criar(String idUsuario, String idFicha, RitualDTO.RitualRequestDTO dto) {
         try {
             verificaAcessoFicha(idUsuario, idFicha);
 
@@ -49,7 +49,7 @@ public class RitualServiceImpl implements RitualService {
     }
 
     @Override
-    public List<RitualDTO.ResponseDTO> obter(String idUsuario, String idFicha) {
+    public List<RitualDTO.RitualResponseDTO> obter(String idUsuario, String idFicha) {
         try {
             verificaAcessoFicha(idUsuario, idFicha);
 
@@ -110,7 +110,7 @@ public class RitualServiceImpl implements RitualService {
     }
 
     private void verificaAcessoFicha(String idUsuario, String idFicha) throws ExecutionException, InterruptedException{
-        AgenteDTO.ResponseDTO ficha = agenteService.obter(idUsuario, idFicha); // verifica se ficha existe
+        AgenteDTO.AgenteResponseDTO ficha = agenteService.obter(idUsuario, idFicha); // verifica se ficha existe
 
         // verificar se o usuário é dono da ficha
         if (!ficha.idUsuario().equals(idUsuario)) {

@@ -5,7 +5,7 @@ import br.com.api.harmonia_rpg.domain.enums.TipoElemento;
 import jakarta.validation.constraints.NotBlank;
 
 public class RitualDTO {
-    public record ResponseDTO(
+    public record RitualResponseDTO(
             String idRitual,
             String nomeRitual,
             TipoElemento tipoElemento,
@@ -23,7 +23,7 @@ public class RitualDTO {
             int circulo
     ){};
 
-    public record RequestDTO(
+    public record RitualRequestDTO(
             @NotBlank(message = "O nome do ritual não pode ser vazio")
             String nomeRitual,
             TipoElemento tipoElemento,

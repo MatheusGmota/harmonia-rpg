@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public interface AgenteService {
-    AgenteDTO.ResponseDTO obter(String idUsuario, String idFicha);
-    List<AgenteDTO.ResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException;
-    AgenteDTO.ResponseDTO criar(String idUsuario, AgenteDTO.RequestDTO dto);
+    AgenteDTO.AgenteResponseDTO obter(String idUsuario, String idFicha);
+    List<AgenteDTO.AgenteResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException;
+    AgenteDTO.AgenteResponseDTO criar(String idUsuario, AgenteDTO.AgenteRequestDTO dto);
     Map<String, Object> editar(String idUsuario, String idFicha, Map<String, Object> updates);
     Map<String, Object> deletar(String idUsuario, String idFicha);
 

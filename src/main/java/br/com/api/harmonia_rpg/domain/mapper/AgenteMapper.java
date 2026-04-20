@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AgenteMapper {
 
-    public static Agente toAgente(AgenteDTO.RequestDTO dto, String idUsuario) {
+    public static Agente toAgente(AgenteDTO.AgenteRequestDTO dto, String idUsuario) {
         Agente agente = new Agente();
 
         agente.setIdUsuario(idUsuario);
@@ -27,8 +27,8 @@ public class AgenteMapper {
         return agente;
     }
 
-    public static AgenteDTO.ResponseDTO toAgenteDto(Agente a) {
-        return new AgenteDTO.ResponseDTO(
+    public static AgenteDTO.AgenteResponseDTO toAgenteDto(Agente a) {
+        return new AgenteDTO.AgenteResponseDTO(
                 a.getId(),
                 a.getIdUsuario(),
                 a.getNome(),

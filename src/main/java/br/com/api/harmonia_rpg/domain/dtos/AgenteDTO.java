@@ -8,8 +8,8 @@ import br.com.api.harmonia_rpg.domain.enums.TipoTrilha;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 
-public class AgenteDTO {
-    public record RequestDTO (
+public abstract class AgenteDTO {
+    public record AgenteRequestDTO (
             String nome,
             Integer idade,
             String imagemUrl,
@@ -17,7 +17,7 @@ public class AgenteDTO {
             TipoClasse classe,
             TipoTrilha trilha,
 
-            DescricaoDTO.RequestDTO descricao,
+            DescricaoDTO.DescricaoRequestDTO descricao,
 
             Integer agilidade,
             Integer forca,
@@ -26,7 +26,7 @@ public class AgenteDTO {
             Integer vigor
     ) {}
 
-    public record ResponseDTO (
+    public record AgenteResponseDTO (
             @DocumentId
             String id,
 

@@ -9,13 +9,13 @@ import java.util.List;
 
 public class CampanhaDTO {
 
-    public record RequestDTO(
+    public record CampanhaRequestDTO(
             @NotBlank String nome,
             String descricao,
             String imagemCapaUrl
     ) {}
 
-    public record ResponseDTO(
+    public record CampanhaResponseDTO(
             String id,
             String nome,
             String descricao,

@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface CampanhaService {
-    CampanhaDTO.ResponseDTO criar(String idUsuario, CampanhaDTO.RequestDTO dto);
+    CampanhaDTO.CampanhaResponseDTO criar(String idUsuario, CampanhaDTO.CampanhaRequestDTO dto);
 
-    CampanhaDTO.ResponseDTO obter(String idUsuario, String idCampanha);
+    CampanhaDTO.CampanhaResponseDTO obter(String idUsuario, String idCampanha);
 
-    List<CampanhaDTO.ResponseDTO> obterMinhas(String idUsuario);
+    List<CampanhaDTO.CampanhaResponseDTO> obterMinhas(String idUsuario);
 
     Map<String, Object> editar(String idUsuario, String idCampanha, Map<String, Object> updates);
 
@@ -21,7 +21,7 @@ public interface CampanhaService {
     // ---- Agentes ----
     List<CampanhaDTO.AgenteNaCampanhaDTO> obterAgentesDaCampanha(String idUsuario, String idCampanha);
 
-    CampanhaDTO.ResponseDTO adicionarAgente(String idUsuario, String idCampanha, String idAgente);
+    CampanhaDTO.CampanhaResponseDTO adicionarAgente(String idUsuario, String idCampanha, String idAgente);
 
     Map<String, Object> editarAgente(String idUsuario, String idCampanha, String idAgente, Map<String, Object> updates);
 
@@ -30,7 +30,7 @@ public interface CampanhaService {
     // ---- Convites por link/token ----
 
     /** Gera (ou reutiliza) o link de convite da campanha. Exclusivo do Mestre. */
-    ConviteDTO.ResponseDTO gerarLinkConvite(String idUsuario, String idCampanha);
+    ConviteDTO.ConviteResponseDTO gerarLinkConvite(String idUsuario, String idCampanha);
 
     /** Jogador logado usa o token do link para entrar na campanha. */
     ConviteDTO.AceitarResponseDTO aceitarPorToken(String idUsuario, String token);

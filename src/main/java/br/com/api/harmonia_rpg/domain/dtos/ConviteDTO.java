@@ -5,7 +5,7 @@ import com.google.cloud.Timestamp;
 
 public class ConviteDTO {
 
-    public record ResponseDTO(
+    public record ConviteResponseDTO(
             String id,
             String idCampanha,
             String nomeCampanha,

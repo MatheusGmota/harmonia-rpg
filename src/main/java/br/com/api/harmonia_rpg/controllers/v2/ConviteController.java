@@ -39,7 +39,7 @@ public class ConviteController {
         """
     )
     @PostMapping("{id}/convites/link")
-    public ResponseEntity<ConviteDTO.ResponseDTO> gerarLink(@PathVariable String id) {
+    public ResponseEntity<ConviteDTO.ConviteResponseDTO> gerarLink(@PathVariable String id) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(campanhaService.gerarLinkConvite(getUsuarioLogado().getId(), id));

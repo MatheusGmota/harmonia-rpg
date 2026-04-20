@@ -54,7 +54,7 @@ public class RitualMapper {
         return ritual;
     }
 
-    public static Ritual toRitual(RitualDTO.RequestDTO dto) {
+    public static Ritual toRitual(RitualDTO.RitualRequestDTO dto) {
         Ritual ritual = new Ritual();
 
         ritual.setNomeRitual(dto.nomeRitual());
@@ -73,8 +73,8 @@ public class RitualMapper {
         return ritual;
     }
 
-    public static RitualDTO.ResponseDTO toRitualDto(Ritual r) {
-        return new RitualDTO.ResponseDTO(
+    public static RitualDTO.RitualResponseDTO toRitualDto(Ritual r) {
+        return new RitualDTO.RitualResponseDTO(
                 r.getIdRitual(),
                 r.getNomeRitual(),
                 r.getTipoElemento(),

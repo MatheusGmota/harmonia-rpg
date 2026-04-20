@@ -28,22 +28,22 @@ public class DescricaoServiceImpl implements DescricaoService {
     private DescricaoRepositoryImpl repository;
 
     @Override
-    public DescricaoDTO.ResponseDTO obter(String idUsuario, String idFicha) {
+    public DescricaoDTO.DescricaoResponseDTO obter(String idUsuario, String idFicha) {
         try {
             Descricao descricao = repository.obterPorId(idFicha, idFicha);
-            return new DescricaoDTO.ResponseDTO(descricao.getId(), descricao.getAparencia(), descricao.getPersonalidade(), descricao.getHistorico(), descricao.getObjetivo());
+            return new DescricaoDTO.DescricaoResponseDTO(descricao.getId(), descricao.getAparencia(), descricao.getPersonalidade(), descricao.getHistorico(), descricao.getObjetivo());
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<DescricaoDTO.ResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException {
+    public List<DescricaoDTO.DescricaoResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException {
         return List.of();
     }
 
     @Override
-    public DescricaoDTO.ResponseDTO criar(String idUsuario, DescricaoDTO.RequestDTO dto) {
+    public DescricaoDTO.DescricaoResponseDTO criar(String idUsuario, DescricaoDTO.DescricaoRequestDTO dto) {
         return null;
     }
 

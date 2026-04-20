@@ -38,7 +38,7 @@ public class AgenteServiceImpl implements AgenteService {
     @Autowired
     private DescricaoRepositoryImpl descricaoRepository;
 
-    public AgenteDTO.ResponseDTO obter(String idUsuario, String idFicha) {
+    public AgenteDTO.AgenteResponseDTO obter(String idUsuario, String idFicha) {
         try {
             UsuarioResponseDTO usuario = usuarioService.obterUsuarioPorId(idUsuario); // verifica se usuario existe
 
@@ -59,13 +59,13 @@ public class AgenteServiceImpl implements AgenteService {
         }
     }
 
-    public List<AgenteDTO.ResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException {
+    public List<AgenteDTO.AgenteResponseDTO> obterAgentesDoUsuario(String idUsuario) throws ExecutionException, InterruptedException {
         return repository.obterPorIdUsuario(idUsuario)
                 .stream().map(AgenteMapper::toAgenteDto)
                 .toList();
     }
 
-    public AgenteDTO.ResponseDTO criar(String idUsuario, AgenteDTO.RequestDTO dto) {
+    public AgenteDTO.AgenteResponseDTO criar(String idUsuario, AgenteDTO.AgenteRequestDTO dto) {
         try {
             usuarioService.obterUsuarioPorId(idUsuario);
 

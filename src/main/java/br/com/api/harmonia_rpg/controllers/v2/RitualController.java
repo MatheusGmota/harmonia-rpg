@@ -36,7 +36,7 @@ public class RitualController {
         """
     )
     @GetMapping
-    public ResponseEntity<List<RitualDTO.ResponseDTO>> get(@PathVariable String idFicha) throws Exception {
+    public ResponseEntity<List<RitualDTO.RitualResponseDTO>> get(@PathVariable String idFicha) throws Exception {
         return ResponseEntity.ok(service.obter(getUsuarioLogado().getId(), idFicha));
     }
 
@@ -48,9 +48,9 @@ public class RitualController {
         """
     )
     @PostMapping
-    public ResponseEntity<RitualDTO.ResponseDTO> create(
+    public ResponseEntity<RitualDTO.RitualResponseDTO> create(
             @PathVariable String idFicha,
-            @RequestBody RitualDTO.RequestDTO ritual) throws Exception {
+            @RequestBody RitualDTO.RitualRequestDTO ritual) throws Exception {
 
         return ResponseEntity.ok(service.criar(getUsuarioLogado().getId(), idFicha, ritual));
     }

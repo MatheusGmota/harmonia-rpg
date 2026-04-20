@@ -4,7 +4,7 @@ import br.com.api.harmonia_rpg.domain.dtos.DescricaoDTO;
 import br.com.api.harmonia_rpg.domain.entities.Descricao;
 public class DescricaoMapper {
 
-    public static Descricao toDescricao(DescricaoDTO.RequestDTO dto) {
+    public static Descricao toDescricao(DescricaoDTO.DescricaoRequestDTO dto) {
         Descricao descricao = new Descricao();
 
         descricao.setAparencia(dto.aparencia());
@@ -14,8 +14,8 @@ public class DescricaoMapper {
 
         return descricao;
     }
-    public static DescricaoDTO.ResponseDTO toDescricaoDto(Descricao d) {
-        return new DescricaoDTO.ResponseDTO(
+    public static DescricaoDTO.DescricaoResponseDTO toDescricaoDto(Descricao d) {
+        return new DescricaoDTO.DescricaoResponseDTO(
                 d.getId(),
                 d.getAparencia(),
                 d.getPersonalidade(),

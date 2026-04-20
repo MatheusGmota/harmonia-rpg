@@ -36,7 +36,7 @@ public class AgenteController {
         """
     )
     @GetMapping("/{idFicha}")
-    public ResponseEntity<AgenteDTO.ResponseDTO> get(@PathVariable String idFicha) throws Exception {
+    public ResponseEntity<AgenteDTO.AgenteResponseDTO> get(@PathVariable String idFicha) throws Exception {
         return ResponseEntity.ok(service.obter(getUsuarioLogado().getId(), idFicha));
     }
 
@@ -47,7 +47,7 @@ public class AgenteController {
         """
     )
     @GetMapping("/")
-    public ResponseEntity<List<AgenteDTO.ResponseDTO>> getAllByUser() throws Exception {
+    public ResponseEntity<List<AgenteDTO.AgenteResponseDTO>> getAllByUser() throws Exception {
         return ResponseEntity.ok(service.obterAgentesDoUsuario(getUsuarioLogado().getId()));
     }
 
@@ -58,8 +58,8 @@ public class AgenteController {
         """
     )
     @PostMapping
-    public ResponseEntity<AgenteDTO.ResponseDTO> create(
-            @RequestBody AgenteDTO.RequestDTO agente) throws Exception {
+    public ResponseEntity<AgenteDTO.AgenteResponseDTO> create(
+            @RequestBody AgenteDTO.AgenteRequestDTO agente) throws Exception {
 
         return ResponseEntity.ok(service.criar(getUsuarioLogado().getId(), agente));
     }

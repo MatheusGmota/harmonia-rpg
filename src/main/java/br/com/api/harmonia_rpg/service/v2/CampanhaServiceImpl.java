@@ -57,7 +57,7 @@ public class CampanhaServiceImpl implements CampanhaService {
     // =========================================================================
 
     @Override
-    public CampanhaDTO.ResponseDTO criar(String idUsuario, CampanhaDTO.RequestDTO dto) {
+    public CampanhaDTO.CampanhaResponseDTO criar(String idUsuario, CampanhaDTO.CampanhaRequestDTO dto) {
         try {
             usuarioService.obterUsuarioPorId(idUsuario); // valida existência do usuário
 
@@ -73,7 +73,7 @@ public class CampanhaServiceImpl implements CampanhaService {
     }
 
     @Override
-    public CampanhaDTO.ResponseDTO obter(String idUsuario, String idCampanha) {
+    public CampanhaDTO.CampanhaResponseDTO obter(String idUsuario, String idCampanha) {
         try {
             Campanha campanha = obterOuLancar(idCampanha);
             verificarAcessoCampanha(campanha, idUsuario);
@@ -85,7 +85,7 @@ public class CampanhaServiceImpl implements CampanhaService {
     }
 
     @Override
-    public List<CampanhaDTO.ResponseDTO> obterMinhas(String idUsuario) {
+    public List<CampanhaDTO.CampanhaResponseDTO> obterMinhas(String idUsuario) {
         try {
             List<Campanha> comoMestre  = campanhaRepository.obterPorMestre(idUsuario);
             List<Campanha> comoJogador = campanhaRepository.obterPorJogador(idUsuario);
@@ -175,7 +175,7 @@ public class CampanhaServiceImpl implements CampanhaService {
     }
 
     @Override
-    public CampanhaDTO.ResponseDTO adicionarAgente(String idUsuario, String idCampanha, String idAgente) {
+    public CampanhaDTO.CampanhaResponseDTO adicionarAgente(String idUsuario, String idCampanha, String idAgente) {
         try {
             Campanha campanha = obterOuLancar(idCampanha);
             verificarAcessoCampanha(campanha, idUsuario);
@@ -284,7 +284,7 @@ public class CampanhaServiceImpl implements CampanhaService {
     // =========================================================================
 
     @Override
-    public ConviteDTO.ResponseDTO gerarLinkConvite(String idUsuario, String idCampanha) {
+    public ConviteDTO.ConviteResponseDTO gerarLinkConvite(String idUsuario, String idCampanha) {
         try {
             Campanha campanha = obterOuLancar(idCampanha);
             verificarMestre(campanha, idUsuario);

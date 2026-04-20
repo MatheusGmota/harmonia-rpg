@@ -1,7 +1,7 @@
 package br.com.api.harmonia_rpg.domain.dtos;
 
 public class DescricaoDTO {
-    public record ResponseDTO(
+    public record DescricaoResponseDTO(
             String id,
             String aparencia,
             String personalidade,
@@ -9,7 +9,7 @@ public class DescricaoDTO {
             String objetivo
     ){}
 
-    public record RequestDTO(
+    public record DescricaoRequestDTO(
             String aparencia,
             String personalidade,
             String historico,

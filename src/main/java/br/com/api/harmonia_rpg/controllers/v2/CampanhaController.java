@@ -37,8 +37,8 @@ public class CampanhaController {
             description = "Cria uma campanha e define o usuário autenticado como Mestre."
     )
     @PostMapping
-    public ResponseEntity<CampanhaDTO.ResponseDTO> criar(
-            @RequestBody @Valid CampanhaDTO.RequestDTO dto) {
+    public ResponseEntity<CampanhaDTO.CampanhaResponseDTO> criar(
+            @RequestBody @Valid CampanhaDTO.CampanhaRequestDTO dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -53,7 +53,7 @@ public class CampanhaController {
         """
     )
     @GetMapping("/{id}")
-    public ResponseEntity<CampanhaDTO.ResponseDTO> obter(@PathVariable String id) {
+    public ResponseEntity<CampanhaDTO.CampanhaResponseDTO> obter(@PathVariable String id) {
         return ResponseEntity.ok(
                 campanhaService.obter(getUsuarioLogado().getId(), id)
         );
@@ -79,7 +79,7 @@ public class CampanhaController {
         """
     )
     @GetMapping("/minhas")
-    public ResponseEntity<List<CampanhaDTO.ResponseDTO>> obterMinhas() {
+    public ResponseEntity<List<CampanhaDTO.CampanhaResponseDTO>> obterMinhas() {
         return ResponseEntity.ok(
                 campanhaService.obterMinhas(getUsuarioLogado().getId())
         );
@@ -134,7 +134,7 @@ public class CampanhaController {
         """
     )
     @PostMapping("/{id}/agentes/{idAgente}")
-    public ResponseEntity<CampanhaDTO.ResponseDTO> adicionarAgente(
+    public ResponseEntity<CampanhaDTO.CampanhaResponseDTO> adicionarAgente(
             @PathVariable String id,
             @PathVariable String idAgente) {
 
