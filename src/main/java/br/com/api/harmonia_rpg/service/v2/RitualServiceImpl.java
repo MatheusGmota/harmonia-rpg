@@ -1,14 +1,16 @@
 package br.com.api.harmonia_rpg.service.v2;
 
+import br.com.api.harmonia_rpg.domain.dtos.AgenteDTO;
+import br.com.api.harmonia_rpg.domain.dtos.RitualDTO;
 import br.com.api.harmonia_rpg.domain.entities.Ritual;
 import br.com.api.harmonia_rpg.domain.exceptions.BusinessException;
 import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
-import br.com.api.harmonia_rpg.repositories.interfaces.RitualRepository;
+import br.com.api.harmonia_rpg.domain.mapper.RitualMapper;
+import br.com.api.harmonia_rpg.repositories.v2.RitualRepositoryImpl;
+import br.com.api.harmonia_rpg.service.interfaces.AgenteService;
 import br.com.api.harmonia_rpg.service.interfaces.RitualService;
-import br.com.api.harmonia_rpg.service.v1.FichaService;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.WriteResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,50 +21,51 @@ import java.util.concurrent.ExecutionException;
 import static br.com.api.harmonia_rpg.tools.UpdateTool.filterValidFields;
 import static br.com.api.harmonia_rpg.tools.UpdateTool.flattenMap;
 
+@Slf4j
 @Service
 public class RitualServiceImpl implements RitualService {
 
     @Autowired
-    private FichaService fichaService;
+    private AgenteService agenteService;
 
     @Autowired
-    private RitualRepository repository;
+    private RitualRepositoryImpl repository;
 
-    public Ritual create(String idFicha, Ritual ritual) {
+    @Override
+    public RitualDTO.ResponseDTO criar(String idUsuario, String idFicha, RitualDTO.RequestDTO dto) {
         try {
-
-            fichaService.obterFicha(idFicha); // verifica se ficha existe
+            verificaAcessoFicha(idUsuario, idFicha);
 
             // caso ficha exista, verifica se já existe um ritual pelo nome
-            if (repository.existeRitualPorNome(idFicha, ritual.getNomeRitual())) {
+            if (repository.existeDocPorNome(idFicha, "nomeRitual", dto.nomeRitual())) {
                 throw new BusinessException("Ritual com esse nome já existe");
             }
 
-            ApiFuture<DocumentSnapshot> future = repository.adicionarRitual(idFicha, ritual).get();
-
-            return future.get().toObject(Ritual.class);
-
+            Ritual adicionar = repository.adicionar(idFicha, RitualMapper.toRitual(dto));
+            return RitualMapper.toRitualDto(adicionar);
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<Ritual> get(String idFicha) {
+    @Override
+    public List<RitualDTO.ResponseDTO> obter(String idUsuario, String idFicha) {
         try {
-            List<QueryDocumentSnapshot> queryDocumentSnapshots = repository.obterRituais(idFicha);
-            return queryDocumentSnapshots.stream()
-                    .map(d -> d.toObject(Ritual.class)
-                    ).toList();
+            verificaAcessoFicha(idUsuario, idFicha);
+
+            List<Ritual> rituais = repository.obterTodos(idFicha);
+            return rituais.stream().map(RitualMapper::toRitualDto).toList();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void partialUpdate(String idFicha, String idRitual, Map<String, Object> updates) {
+    @Override
+    public Map<String, Object> editar(String idUsuario, String idFicha, String idRitual, Map<String, Object> updates) {
         try {
-            fichaService.obterFicha(idFicha); // verifica se ficha existe
+            verificaAcessoFicha(idUsuario, idFicha);
 
-            if (!repository.existeRitual(idFicha, idRitual))
+            if (!repository.existeDocumento(idFicha, idRitual))
                 throw new NotFoundException("Ritual não encontrado"); // verifica se ritual existe
 
             Map<String, Object> flattenedUpdates = flattenMap(updates, "");
@@ -71,24 +74,48 @@ public class RitualServiceImpl implements RitualService {
             Map<String, Object> safeUpdates = filterValidFields(flattenedUpdates, Ritual.class);
             safeUpdates.remove("idRitual");
 
-            repository.atualizarParcialRitual(idFicha, idRitual, safeUpdates);
+            WriteResult result = repository.atualizar(idFicha, idRitual, safeUpdates);
 
+            log.info("Ritual id={} editado em: {}", idFicha, result.getUpdateTime());
+            return Map.of(
+                    "id", idRitual,
+                    "message", "Ritual atualizado com sucesso",
+                    "atualizadoEm", result.getUpdateTime()
+            );
         } catch (ExecutionException | InterruptedException e) {
+            log.error("Erro ao editar ritual id={}: {}", idRitual, e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public void delete(String idFicha, String idRitual) {
+    @Override
+    public Map<String, Object> deletar(String idUsuario, String idFicha, String idRitual) {
         try {
-            fichaService.obterFicha(idFicha); // verifica se ficha existe
+            verificaAcessoFicha(idUsuario, idFicha);
 
-            if (!repository.existeRitual(idFicha, idRitual))
+            if (!repository.existeDocumento(idFicha, idRitual))
                 throw new NotFoundException("Ritual não encontrado"); // verifica se ritual existe
 
-            repository.deletarRitual(idFicha, idRitual);
+            WriteResult result = repository.deletar(idFicha, idRitual);
+
+            log.info("Ritual id={} deletado pelo id={} em: {}", idRitual, idUsuario, result.getUpdateTime());
+            return Map.of(
+                    "message", "Ritual deletado com sucesso",
+                    "atualizadoEm", result.getUpdateTime()
+            );
         } catch (ExecutionException | InterruptedException e) {
+            log.error("Erro ao deletar ritual id={}: {}", idRitual, e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
+    private void verificaAcessoFicha(String idUsuario, String idFicha) throws ExecutionException, InterruptedException{
+        AgenteDTO.ResponseDTO ficha = agenteService.obter(idUsuario, idFicha); // verifica se ficha existe
+
+        // verificar se o usuário é dono da ficha
+        if (!ficha.idUsuario().equals(idUsuario)) {
+            log.warn("Usuário id={} tentou acessar ficha id={} sem ter permissão", idUsuario, ficha.id());
+            throw new BusinessException("Sem permissão para acessar ficha");
+        }
+    }
 }

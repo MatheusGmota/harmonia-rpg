@@ -10,7 +10,7 @@ import br.com.api.harmonia_rpg.domain.exceptions.NotFoundException;
 import br.com.api.harmonia_rpg.domain.mapper.AgenteMapper;
 import br.com.api.harmonia_rpg.domain.mapper.DescricaoMapper;
 import br.com.api.harmonia_rpg.repositories.interfaces.AgenteRepository;
-import br.com.api.harmonia_rpg.repositories.interfaces.DescricaoRepository;
+import br.com.api.harmonia_rpg.repositories.v2.DescricaoRepositoryImpl;
 import br.com.api.harmonia_rpg.service.interfaces.AgenteService;
 import br.com.api.harmonia_rpg.service.v1.UsuarioService;
 import com.google.cloud.firestore.WriteResult;
@@ -36,7 +36,7 @@ public class AgenteServiceImpl implements AgenteService {
     private AgenteRepository repository;
 
     @Autowired
-    private DescricaoRepository descricaoRepository;
+    private DescricaoRepositoryImpl descricaoRepository;
 
     public AgenteDTO.ResponseDTO obter(String idUsuario, String idFicha) {
         try {

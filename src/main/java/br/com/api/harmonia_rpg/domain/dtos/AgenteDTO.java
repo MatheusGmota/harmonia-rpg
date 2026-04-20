@@ -17,7 +17,7 @@ public class AgenteDTO {
             TipoClasse classe,
             TipoTrilha trilha,
 
-            DescricaoDTO descricao,
+            DescricaoDTO.RequestDTO descricao,
 
             Integer agilidade,
             Integer forca,

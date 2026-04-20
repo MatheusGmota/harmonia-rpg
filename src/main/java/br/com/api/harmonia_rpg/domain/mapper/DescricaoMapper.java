@@ -2,12 +2,9 @@ package br.com.api.harmonia_rpg.domain.mapper;
 
 import br.com.api.harmonia_rpg.domain.dtos.DescricaoDTO;
 import br.com.api.harmonia_rpg.domain.entities.Descricao;
-import org.springframework.stereotype.Component;
-
-@Component
 public class DescricaoMapper {
 
-    public static Descricao toDescricao(DescricaoDTO dto) {
+    public static Descricao toDescricao(DescricaoDTO.RequestDTO dto) {
         Descricao descricao = new Descricao();
 
         descricao.setAparencia(dto.aparencia());
@@ -16,5 +13,14 @@ public class DescricaoMapper {
         descricao.setObjetivo(dto.objetivo());
 
         return descricao;
+    }
+    public static DescricaoDTO.ResponseDTO toDescricaoDto(Descricao d) {
+        return new DescricaoDTO.ResponseDTO(
+                d.getId(),
+                d.getAparencia(),
+                d.getPersonalidade(),
+                d.getHistorico(),
+                d.getObjetivo()
+        );
     }
 }

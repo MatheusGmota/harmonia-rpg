@@ -1,10 +1,13 @@
 package br.com.api.harmonia_rpg.controllers.v2;
 
-
-import br.com.api.harmonia_rpg.domain.entities.Ritual;
+import br.com.api.harmonia_rpg.domain.dtos.RitualDTO;
+import br.com.api.harmonia_rpg.domain.entities.Usuario;
 import br.com.api.harmonia_rpg.service.interfaces.RitualService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,35 +20,79 @@ public class RitualController {
     @Autowired
     private RitualService service;
 
-    @GetMapping()
-    public ResponseEntity<List<Ritual>> get(
-            @PathVariable String idFicha) throws Exception {
-        return ResponseEntity.ok(service.get(idFicha));
-    };
-
-    @PostMapping
-    public ResponseEntity<Ritual> create(
-            @PathVariable String idFicha,
-            @RequestBody Ritual ritual) throws Exception {
-
-        return ResponseEntity.ok(service.create(idFicha, ritual));
+    private Usuario getUsuarioLogado() {
+        try {
+            return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("Acesso negado.");
+        }
     }
 
-    @PatchMapping
-    public ResponseEntity<Void> patch(
+    @Operation(
+            summary = "Listar rituais da ficha",
+            description = """
+            Retorna todos os rituais vinculados a uma ficha.
+            - Apenas o dono da ficha pode acessar
+        """
+    )
+    @GetMapping
+    public ResponseEntity<List<RitualDTO.ResponseDTO>> get(@PathVariable String idFicha) throws Exception {
+        return ResponseEntity.ok(service.obter(getUsuarioLogado().getId(), idFicha));
+    }
+
+    @Operation(
+            summary = "Criar ritual",
+            description = """
+            Adiciona um novo ritual à ficha.
+            - Apenas o dono da ficha pode adicionar
+        """
+    )
+    @PostMapping
+    public ResponseEntity<RitualDTO.ResponseDTO> create(
             @PathVariable String idFicha,
-            @RequestParam("id-ritual") String idRitual,
+            @RequestBody RitualDTO.RequestDTO ritual) throws Exception {
+
+        return ResponseEntity.ok(service.criar(getUsuarioLogado().getId(), idFicha, ritual));
+    }
+
+    @Operation(
+            summary = "Editar ritual",
+            description = """
+            Atualiza parcialmente um ritual da ficha.
+            
+            - Atualização via PATCH
+            - Apenas campos enviados serão alterados
+            - Campos inválidos são ignorados
+            
+            - Apenas o dono da ficha pode editar
+        """
+    )
+    @PatchMapping("/{idRitual}")
+    public ResponseEntity<Map<String, Object>> patch(
+            @PathVariable String idFicha,
+            @PathVariable("idRitual") String idRitual,
             @RequestBody Map<String, Object> updates) {
 
-        service.partialUpdate(idFicha, idRitual, updates);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                service.editar(getUsuarioLogado().getId(), idFicha, idRitual, updates)
+        );
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete(
+    @Operation(
+            summary = "Remover ritual",
+            description = """
+            Remove um ritual da ficha.
+            - Não afeta outros dados da ficha
+            - Apenas o dono pode remover
+        """
+    )
+    @DeleteMapping("/{idRitual}")
+    public ResponseEntity<Map<String, Object>> delete(
             @PathVariable String idFicha,
-            @RequestParam("id-ritual") String idRitual) {
-        service.delete(idFicha, idRitual);
-        return ResponseEntity.ok().build();
+            @PathVariable("idRitual") String idRitual) {
+
+        return ResponseEntity.ok(
+                service.deletar(getUsuarioLogado().getId(), idFicha, idRitual)
+        );
     }
 }

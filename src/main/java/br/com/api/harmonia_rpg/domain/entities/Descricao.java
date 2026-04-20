@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Descricao {
     @DocumentId
-    private String idFicha;
+    private String id;
 
     private String aparencia;
     private String personalidade;
