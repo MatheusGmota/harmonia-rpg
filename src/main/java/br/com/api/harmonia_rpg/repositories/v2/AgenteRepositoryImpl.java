@@ -7,6 +7,7 @@ import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +30,34 @@ public class AgenteRepositoryImpl implements AgenteRepository {
                 .get().get();
 
         return documentSnapshot.toObject(Agente.class);
+    }
+
+    @Override
+    public List<Agente> obterPorIds(List<String> ids) throws ExecutionException, InterruptedException {
+        if (ids.isEmpty()) return List.of();
+
+        // Firestore limita whereIn a 30 itens por query — divide em lotes
+        List<Agente> resultado = new ArrayList<>();
+
+        List<List<String>> lotes = partition(ids, 30);
+
+        for (List<String> lote : lotes) {
+            List<Agente> agentesDoLote = getCollection()
+                    .whereIn(FieldPath.documentId(), lote)
+                    .get().get()
+                    .toObjects(Agente.class);
+            resultado.addAll(agentesDoLote);
+        }
+
+        return resultado;
+    }
+
+    private <T> List<List<T>> partition(List<T> lista, int tamanho) {
+        List<List<T>> lotes = new ArrayList<>();
+        for (int i = 0; i < lista.size(); i += tamanho) {
+            lotes.add(lista.subList(i, Math.min(i + tamanho, lista.size())));
+        }
+        return lotes;
     }
 
     public List<Agente> obterPorIdUsuario(String idUsuario) throws ExecutionException, InterruptedException {

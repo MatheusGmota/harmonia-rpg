@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 public interface AgenteRepository {
     Agente obter(String idFicha) throws ExecutionException, InterruptedException;
+    List<Agente> obterPorIds(List<String> ids) throws ExecutionException, InterruptedException;
     List<Agente> obterPorIdUsuario(String idUsuario) throws ExecutionException, InterruptedException;
     Agente adicionar(Agente ficha) throws ExecutionException, InterruptedException;
     WriteResult deletar(String idFicha) throws ExecutionException, InterruptedException;

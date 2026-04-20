@@ -18,3 +18,8 @@ springdoc:
 
 server:
   port: ${PORT:8080}
+
+app:
+  convite:
+    base-url: ${FRONT_URL:}
+    expiracao-dias: 7
