@@ -77,8 +77,9 @@ public class AgenteServiceImpl implements AgenteService {
             }
 
             Agente agente = repository.adicionar(ficha);
-
-            descricaoRepository.adicionar(agente.getId(), DescricaoMapper.toDescricao(dto.descricao()));
+            if (dto.descricao() != null) {
+                descricaoRepository.adicionar(agente.getId(), DescricaoMapper.toDescricao(dto.descricao()));
+            }
 
             return AgenteMapper.toAgenteDto(agente);
         } catch (InterruptedException | ExecutionException e) {

@@ -1,13 +1,10 @@
 package br.com.api.harmonia_rpg.repositories.v2;
 
-import br.com.api.harmonia_rpg.domain.entities.Ritual;
-import br.com.api.harmonia_rpg.domain.wrapper.RituaisWrapper;
 import br.com.api.harmonia_rpg.repositories.interfaces.GenericRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;

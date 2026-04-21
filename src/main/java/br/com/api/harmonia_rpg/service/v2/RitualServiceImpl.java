@@ -23,7 +23,7 @@ import static br.com.api.harmonia_rpg.tools.UpdateTool.flattenMap;
 
 @Slf4j
 @Service
-public class RitualServiceImpl implements RitualService {
+public class RitualServiceImpl extends GenericService implements RitualService {
 
     @Autowired
     private AgenteService agenteService;
@@ -106,16 +106,6 @@ public class RitualServiceImpl implements RitualService {
         } catch (ExecutionException | InterruptedException e) {
             log.error("Erro ao deletar ritual id={}: {}", idRitual, e.getMessage());
             throw new RuntimeException(e);
-        }
-    }
-
-    private void verificaAcessoFicha(String idUsuario, String idFicha) throws ExecutionException, InterruptedException{
-        AgenteDTO.AgenteResponseDTO ficha = agenteService.obter(idUsuario, idFicha); // verifica se ficha existe
-
-        // verificar se o usuário é dono da ficha
-        if (!ficha.idUsuario().equals(idUsuario)) {
-            log.warn("Usuário id={} tentou acessar ficha id={} sem ter permissão", idUsuario, ficha.id());
-            throw new BusinessException("Sem permissão para acessar ficha");
         }
     }
 }
