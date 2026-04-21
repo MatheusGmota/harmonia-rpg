@@ -1,8 +1,8 @@
 package br.com.api.harmonia_rpg.controllers.v2;
 
-import br.com.api.harmonia_rpg.domain.dtos.RitualDTO;
+import br.com.api.harmonia_rpg.domain.dtos.DescricaoDTO;
 import br.com.api.harmonia_rpg.domain.entities.Usuario;
-import br.com.api.harmonia_rpg.service.interfaces.RitualService;
+import br.com.api.harmonia_rpg.service.interfaces.DescricaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("api/v2/ficha/{idFicha}/rituais")
-public class RitualController {
-
+@RestController("DescricaoControllerV2")
+@RequestMapping("api/v2/ficha/{idFicha}/descricao")
+public class DescricaoController {
     @Autowired
-    private RitualService service;
+    private DescricaoService service;
 
     private Usuario getUsuarioLogado() {
         try {
@@ -29,36 +27,36 @@ public class RitualController {
     }
 
     @Operation(
-            summary = "Listar rituais da ficha",
+            summary = "Obter descrição da ficha",
             description = """
-            Retorna todos os rituais vinculados a uma ficha.
+            Retorna a descrição vinculada a uma ficha.
             - Apenas o dono da ficha pode acessar
         """
     )
     @GetMapping
-    public ResponseEntity<List<RitualDTO.RitualResponseDTO>> get(@PathVariable String idFicha) throws Exception {
+    public ResponseEntity<DescricaoDTO.DescricaoResponseDTO> get(@PathVariable String idFicha) throws Exception {
         return ResponseEntity.ok(service.obter(getUsuarioLogado().getId(), idFicha));
     }
 
     @Operation(
-            summary = "Criar ritual",
+            summary = "Criar descrição",
             description = """
-            Adiciona um novo ritual à ficha.
+            Adiciona um novo descrição à ficha.
             - Apenas o dono da ficha pode adicionar
         """
     )
     @PostMapping
-    public ResponseEntity<RitualDTO.RitualResponseDTO> create(
+    public ResponseEntity<DescricaoDTO.DescricaoResponseDTO> create(
             @PathVariable String idFicha,
-            @RequestBody RitualDTO.RitualRequestDTO ritual) throws Exception {
+            @RequestBody DescricaoDTO.DescricaoRequestDTO descricao) throws Exception {
 
-        return ResponseEntity.ok(service.criar(getUsuarioLogado().getId(), idFicha, ritual));
+        return ResponseEntity.ok(service.criar(getUsuarioLogado().getId(), idFicha, descricao));
     }
 
     @Operation(
-            summary = "Editar ritual",
+            summary = "Editar descrição",
             description = """
-            Atualiza parcialmente um ritual da ficha.
+            Atualiza parcialmente um descrição da ficha.
             
             - Atualização via PATCH
             - Apenas campos enviados serão alterados
@@ -67,32 +65,33 @@ public class RitualController {
             - Apenas o dono da ficha pode editar
         """
     )
-    @PatchMapping("/{idRitual}")
+    @PatchMapping("/{idDescricao}")
     public ResponseEntity<Map<String, Object>> patch(
             @PathVariable String idFicha,
-            @PathVariable("idRitual") String idRitual,
+            @PathVariable String idDescricao,
             @RequestBody Map<String, Object> updates) {
 
         return ResponseEntity.ok(
-                service.editar(getUsuarioLogado().getId(), idFicha, idRitual, updates)
+                service.editar(getUsuarioLogado().getId(), idFicha, idDescricao, updates)
         );
     }
 
     @Operation(
-            summary = "Remover ritual",
+            summary = "Remover descrição",
             description = """
-            Remove um ritual da ficha.
+            Remove descrição da ficha.
             - Não afeta outros dados da ficha
             - Apenas o dono pode remover
         """
     )
-    @DeleteMapping("/{idRitual}")
+    @DeleteMapping("idDescricao")
     public ResponseEntity<Map<String, Object>> delete(
             @PathVariable String idFicha,
-            @PathVariable("idRitual") String idRitual) {
+            @PathVariable String idDescricao
+    ) {
 
         return ResponseEntity.ok(
-                service.deletar(getUsuarioLogado().getId(), idFicha, idRitual)
+                service.deletar(getUsuarioLogado().getId(), idFicha, idDescricao)
         );
     }
 }

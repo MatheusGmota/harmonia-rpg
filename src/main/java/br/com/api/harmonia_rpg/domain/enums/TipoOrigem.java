@@ -26,6 +26,7 @@ public enum TipoOrigem {
     MAGNATA("Magnata"),
     MERCENARIO("Mercenário"),
     MILITAR("Militar"),
+    MUNDANO("Mundano"),
     OPERARIO("Operário"),
     POLICIAL("Policial"),
     PROFESSOR("Professor"),

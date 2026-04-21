@@ -39,8 +39,6 @@ public class DescricaoService {
                 throw new ObjectAlreadyExistsException("Descrição já existe no id:" + idFicha);
             }
 
-            descricao.setIdFicha(idFicha); // garante vínculo entre a ficha e os atributos
-
             DocumentSnapshot snapshot = repository.salvar(idFicha, descricao);
             return snapshot.toObject(DescricaoResponseDTO.class);
         } catch (ExecutionException | InterruptedException e) {
