@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v2/convites")
+@RequestMapping("api/v2/campanhas")
 public class ConviteController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class ConviteController {
             - Apenas estar autenticado
         """
     )
-    @PostMapping("convites/entrar/{token}")
+    @PostMapping("entrar/{token}")
     public ResponseEntity<ConviteDTO.AceitarResponseDTO> entrarPorToken(@PathVariable String token) {
         return ResponseEntity.ok(
                 campanhaService.aceitarPorToken(getUsuarioLogado().getId(), token)
